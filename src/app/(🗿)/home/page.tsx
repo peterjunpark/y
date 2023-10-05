@@ -1,5 +1,5 @@
 import React from "react";
 
 export default function Home() {
-  return <div>Home</div>;
+  return <div className="h-12 bg-red-500">Home</div>;
 }
