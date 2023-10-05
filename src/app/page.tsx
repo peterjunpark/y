@@ -1,21 +1,16 @@
 import React from "react";
 import localFont from "next/font/local";
 import { cn } from "@/lib/utils";
-import { Search, Bookmark, Users2, User2, Feather } from "lucide-react";
+import { Logo } from "@/components/layout/atoms/logo";
 import { Button } from "@/components/ui/button";
-
-const xFont = localFont({
-  src: "../../public/special-alphabets-4-regular.otf",
-  weight: "600",
-  display: "swap",
-  style: "normal",
-});
 
 export default function Home() {
   return (
     <main className="flex h-screen">
       <div className="flex h-full w-full flex-col items-center justify-center">
-        <h1 className={cn(xFont.className, "select-none text-[30rem]")}>Y</h1>
+        <h1 className="select-none text-[30rem]">
+          <Logo />
+        </h1>
       </div>
       <div className="flex h-full w-full flex-col items-center justify-center">
         <h2>Happening now</h2>
