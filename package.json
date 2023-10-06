@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "generate": "drizzle-kit generate:pg",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/core": "^0.16.1",
     "@auth/drizzle-adapter": "^0.3.3",
     "@neondatabase/serverless": "^0.6.0",
     "@radix-ui/react-avatar": "^1.0.4",

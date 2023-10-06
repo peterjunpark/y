@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import { HomeHeader } from "../../../components/home/header";
 import {
   Card,
@@ -9,6 +10,10 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { posts, users, communities } from "@/data";
+
+export const metadata: Metadata = {
+  title: "Home / Y",
+};
 
 export default function Home() {
   return (
