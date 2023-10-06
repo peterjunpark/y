@@ -3,31 +3,38 @@
 import React from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { Github, Instagram, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
+import { Github, Discord } from "react-bootstrap-icons";
 
 export function LogInButton() {
   const { data: session, status } = useSession();
 
-  if (status === "loading") return;
+  const loginProviders = [
+    {
+      name: "GitHub",
+      icon: <Github />,
+      oAuthProvider: "github",
+    },
+    {
+      name: "Discord",
+      icon: <Discord />,
+      oAuthProvider: "discord",
+    },
+  ];
 
   return (
     <>
-      <Button
-        onClick={() => signIn("github", { callbackUrl: "/home" })}
-        variant="ghost"
-        className="flex justify-start gap-3 rounded-full"
-      >
-        <Github />
-        Log in with GitHub
-      </Button>
-      <Button
-        onClick={() => signIn("instagram", { callbackUrl: "/home" })}
-        variant="ghost"
-        className="flex justify-start gap-3 rounded-full"
-      >
-        <Instagram />
-        Log in with Instagram
-      </Button>
+      {loginProviders.map(({ name, icon, oAuthProvider }, index) => (
+        <Button
+          key={index} // Added key prop for React list rendering
+          onClick={() => signIn(oAuthProvider, { callbackUrl: "/home" })}
+          variant="default"
+          className="m-1 flex w-64 justify-start gap-3 rounded-full text-xl"
+        >
+          {icon}
+          Log in with {name}
+        </Button>
+      ))}
     </>
   );
 }

@@ -28,6 +28,7 @@
     "next-auth": "^4.23.2",
     "next-themes": "^0.2.1",
     "react": "^18",
+    "react-bootstrap-icons": "^1.10.3",
     "react-dom": "^18",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7"

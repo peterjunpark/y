@@ -18,13 +18,7 @@ export function UserCard() {
           variant="ghost"
           className="flex justify-between rounded-full py-7 xl:w-64"
         >
-          <div className="flex gap-3 ">
-            <UserAvatar />
-            <ul className="hidden flex-col items-start xl:flex">
-              <li>qkrwns</li>
-              <li>@qkrwns</li>
-            </ul>
-          </div>
+          <UserAvatar />
           <MoreVertical className="hidden xl:block" />
         </Button>
       </PopoverTrigger>

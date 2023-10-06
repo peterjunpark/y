@@ -22,7 +22,9 @@ export default function Home() {
       {posts.map((post, index) => (
         <Card key={index} className="rounded-none">
           <CardHeader>{post.user_id}</CardHeader>
+          <CardDescription>This is a card descriptio</CardDescription>
           <CardContent>{post.body}</CardContent>
+          <CardFooter>This is a card footer</CardFooter>
         </Card>
       ))}
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus nobis
