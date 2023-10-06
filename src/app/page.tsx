@@ -1,8 +1,6 @@
 import React from "react";
-import localFont from "next/font/local";
-import { cn } from "@/lib/utils";
 import { Logo } from "@/components/layout/atoms/logo";
-import { Button } from "@/components/ui/button";
+import { LogInButton } from "@/components/auth/buttons";
 
 export default function Home() {
   return (
@@ -13,11 +11,10 @@ export default function Home() {
         </h1>
       </div>
       <div className="flex h-full w-full flex-col items-center justify-center">
-        <h2>Happening now</h2>
+        <h2 className="text-8xl">Happening now</h2>
         <div className="flex flex-col">
           <h3>Join today.</h3>
-          <Button>Sign up with Google</Button>
-          <Button>Sign up with Apple</Button>
+          <LogInButton />
         </div>
       </div>
     </main>

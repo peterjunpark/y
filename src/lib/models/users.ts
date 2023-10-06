@@ -1,42 +1,58 @@
-import {
-  integer,
-  pgEnum,
-  pgTable,
-  serial,
-  uniqueIndex,
-  varchar,
-} from "drizzle-orm/pg-core";
-import { db } from "../drizzle";
+// import {
+//   timestamp,
+//   pgTable,
+//   text,
+//   primaryKey,
+//   integer,
+// } from "drizzle-orm/pg-core";
+// import type { AdapterAccount } from "next-auth/core/adapters";
 
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  handle: varchar("handle", { length: 69 }).notNull().unique(),
-});
+// export const users = pgTable("user", {
+//   id: text("id").notNull().primaryKey(),
+//   name: text("name"),
+//   email: text("email").notNull(),
+//   emailVerified: timestamp("emailVerified", { mode: "date" }),
+//   image: text("image"),
+// });
 
-export type User = typeof users.$inferSelect;
-// declaring enum in database
-export const popularityEnum = pgEnum("popularity", [
-  "unknown",
-  "known",
-  "popular",
-]);
+// export const accounts = pgTable(
+//   "account",
+//   {
+//     userId: text("userId")
+//       .notNull()
+//       .references(() => users.id, { onDelete: "cascade" }),
+//     type: text("type").$type<AdapterAccount["type"]>().notNull(),
+//     provider: text("provider").notNull(),
+//     providerAccountId: text("providerAccountId").notNull(),
+//     refresh_token: text("refresh_token"),
+//     access_token: text("access_token"),
+//     expires_at: integer("expires_at"),
+//     token_type: text("token_type"),
+//     scope: text("scope"),
+//     id_token: text("id_token"),
+//     session_state: text("session_state"),
+//   },
+//   (account) => ({
+//     compoundKey: primaryKey(account.provider, account.providerAccountId),
+//   }),
+// );
 
-export const countries = pgTable(
-  "countries",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
-  },
-  (countries) => {
-    return {
-      nameIndex: uniqueIndex("name_idx").on(countries.name),
-    };
-  },
-);
+// export const sessions = pgTable("session", {
+//   sessionToken: text("sessionToken").notNull().primaryKey(),
+//   userId: text("userId")
+//     .notNull()
+//     .references(() => users.id, { onDelete: "cascade" }),
+//   expires: timestamp("expires", { mode: "date" }).notNull(),
+// });
 
-export const cities = pgTable("cities", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 256 }),
-  countryId: integer("country_id").references(() => countries.id),
-  popularity: popularityEnum("popularity"),
-});
+// export const verificationTokens = pgTable(
+//   "verificationToken",
+//   {
+//     identifier: text("identifier").notNull(),
+//     token: text("token").notNull(),
+//     expires: timestamp("expires", { mode: "date" }).notNull(),
+//   },
+//   (vt) => ({
+//     compoundKey: primaryKey(vt.identifier, vt.token),
+//   }),
+// );

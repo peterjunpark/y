@@ -11,14 +11,26 @@ export const users = [
     handle: "honomo",
     premium: true,
     followers: [],
-    bookmarks: [],
+    bookmarks: ["69four20"],
   },
 ];
 
-export const yaps = [
+export const posts = [
   {
     id: "69four20",
     user_id: "abc123zxc",
-    likes: "",
+    community_id: null,
+    parent_yap_id: null,
+    body: "Hello! I love this website.",
+    image: "",
+    likes: 5,
+  },
+];
+
+export const communities = [
+  {
+    id: "c9w4nv",
+    name: "Cat Lovers",
+    users: [],
   },
 ];

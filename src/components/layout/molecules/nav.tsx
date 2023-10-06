@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { AvatarBtn } from "../atoms/avatar-btn";
+import { UserCard } from "./user-card";
 import { Logo } from "../atoms/logo";
 import { Button } from "@/components/ui/button";
 import { Home, Search, Bookmark, Users2, User2, Feather } from "lucide-react";
@@ -62,7 +62,7 @@ export function Nav() {
           </Button>
         </nav>
       </div>
-      <AvatarBtn />
+      <UserCard />
     </div>
   );
 }
