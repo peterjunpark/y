@@ -1,11 +1,13 @@
-"use client";
-
-import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-options";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
-export function UserAvatar() {
-  const { data: session } = useSession();
+export async function UserAvatar() {
+  const session = await getServerSession(authOptions);
+
+  console.log(session);
+
   return (
     <div className="flex gap-3 ">
       <Avatar>
