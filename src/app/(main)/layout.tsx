@@ -1,8 +1,11 @@
 import React from "react";
-import { AuthCheck } from "@/components/auth/auth-check";
 import { getServerSession } from "next-auth/next";
 import { Sidebars } from "@/components/layout/sidebars";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth-options";
+import { redirect } from "next/navigation";
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/drizzle";
+import { users } from "@/lib/schema/users";
 
 export default async function AppLayout({
   children,
@@ -10,13 +13,11 @@ export default async function AppLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
+  console.log(session);
 
-  return (
-    <>
-      <pre>{JSON.stringify(session, null, 2)}</pre>
-      {/* <AuthCheck> */}
-      <Sidebars>{children}</Sidebars>
-      {/* </AuthCheck> */}
-    </>
-  );
+  if (session) {
+    return <Sidebars>{children}</Sidebars>;
+  } else {
+    redirect("/");
+  }
 }

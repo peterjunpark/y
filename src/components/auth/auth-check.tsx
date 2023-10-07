@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { FullPageLoading } from "../layout/full-page-loading";
+import { useToast } from "@/components/ui/use-toast";
 
 type AuthProps = {
   children: React.ReactNode;
@@ -12,16 +13,16 @@ type AuthProps = {
 
 export function AuthCheck({ children, className }: AuthProps) {
   const { data: session, status } = useSession();
+  const { toast } = useToast();
 
-  if (session) {
+  if (session && status === "authenticated") {
     return <section className={className}>{children}</section>;
   }
-  if (status === "loading") {
-    return (
-      <div className="flex h-screen items-center justify-center text-8xl">
-        <FullPageLoading />
-      </div>
-    );
+  if (status === "unauthenticated") {
+    toast({
+      description: "Please log in.",
+    });
+    return redirect("/");
   }
-  redirect("/");
+  return <FullPageLoading />;
 }
