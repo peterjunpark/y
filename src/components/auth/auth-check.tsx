@@ -13,8 +13,6 @@ type AuthProps = {
 export function AuthCheck({ children, className }: AuthProps) {
   const { data: session, status } = useSession();
 
-  console.log({ session, status });
-
   if (session) {
     return <section className={className}>{children}</section>;
   }

@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "7bf59e1c-1fbb-4e18-aa13-fbbcb5559a41",
+  "id": "18cff79e-6471-446e-9b7f-4c89d6a48b85",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
@@ -175,6 +175,12 @@
         "image": {
           "name": "image",
           "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "handle": {
+          "name": "handle",
+          "type": "varchar(12)",
           "primaryKey": false,
           "notNull": false
         }

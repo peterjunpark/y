@@ -4,6 +4,7 @@ import {
   text,
   primaryKey,
   integer,
+  varchar,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 
@@ -13,6 +14,7 @@ export const users = pgTable("user", {
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  handle: varchar("handle", { length: 12 }),
 });
 
 export const accounts = pgTable(
