@@ -1,11 +1,21 @@
 import React from "react";
-import { AuthCheck } from "@/components/auth/auth-check";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth-options";
 import { Sidebars } from "@/components/layout/sidebars";
+import { redirect } from "next/navigation";
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <AuthCheck>
-      <Sidebars>{children}</Sidebars>
-    </AuthCheck>
-  );
+export default async function AppLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await getServerSession(authOptions);
+
+  if (session) {
+    if (session.user.handle) {
+      return <Sidebars>{children}</Sidebars>;
+    }
+    redirect(`/create/${session.user.id}`);
+  }
+  redirect("/");
 }

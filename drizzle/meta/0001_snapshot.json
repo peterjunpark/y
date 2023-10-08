@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "18cff79e-6471-446e-9b7f-4c89d6a48b85",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "a555682e-7496-42c5-9c27-bb8951d4acb5",
+  "prevId": "18cff79e-6471-446e-9b7f-4c89d6a48b85",
   "tables": {
     "account": {
       "name": "account",
@@ -188,7 +188,15 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "user_handle_unique": {
+          "name": "user_handle_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "handle"
+          ]
+        }
+      }
     },
     "verificationToken": {
       "name": "verificationToken",

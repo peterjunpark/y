@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS "user" (
 	"name" text,
 	"email" text NOT NULL,
 	"emailVerified" timestamp,
-	"image" text
+	"image" text,
+	"handle" varchar(12)
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "verificationToken" (

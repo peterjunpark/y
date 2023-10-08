@@ -1,5 +1,6 @@
 import React from "react";
+import { FullPageLoading } from "@/components/layout/full-page-loading";
 
 export default function Explore() {
-  return <div>Explore</div>;
+  return <FullPageLoading />;
 }

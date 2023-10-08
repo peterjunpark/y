@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "18cff79e-6471-446e-9b7f-4c89d6a48b85",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "81cdb19e-66e5-4d3e-bf63-f1f2c066ede4",
+  "prevId": "0c2c732e-9baf-4ee0-b524-17628a36c037",
   "tables": {
     "account": {
       "name": "account",
@@ -35,6 +35,12 @@
         "refresh_token": {
           "name": "refresh_token",
           "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "refresh_token_expires_in": {
+          "name": "refresh_token_expires_in",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -164,7 +170,7 @@
           "name": "email",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "emailVerified": {
           "name": "emailVerified",
@@ -188,7 +194,22 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "user_email_unique": {
+          "name": "user_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        },
+        "user_handle_unique": {
+          "name": "user_handle_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "handle"
+          ]
+        }
+      }
     },
     "verificationToken": {
       "name": "verificationToken",
