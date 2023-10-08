@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 export async function UserAvatar() {
   const session = await getServerSession(authOptions);
 
-  console.log(session);
+  console.log({ avatar: session });
 
   return (
     <div className="flex gap-3 ">

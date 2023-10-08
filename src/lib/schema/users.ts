@@ -14,7 +14,7 @@ export const users = pgTable("user", {
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
-  handle: varchar("handle", { length: 12 }),
+  handle: varchar("handle", { length: 12 }).unique(),
 });
 
 export const accounts = pgTable(

@@ -1,11 +1,8 @@
 import React from "react";
 import { getServerSession } from "next-auth/next";
-import { Sidebars } from "@/components/layout/sidebars";
 import { authOptions } from "@/lib/auth-options";
+import { Sidebars } from "@/components/layout/sidebars";
 import { redirect } from "next/navigation";
-import { eq } from "drizzle-orm";
-import { db } from "@/lib/drizzle";
-import { users } from "@/lib/schema/users";
 
 export default async function AppLayout({
   children,
@@ -13,11 +10,12 @@ export default async function AppLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
-  console.log(session);
 
   if (session) {
-    return <Sidebars>{children}</Sidebars>;
-  } else {
-    redirect("/");
+    if (session.user.handle) {
+      return <Sidebars>{children}</Sidebars>;
+    }
+    redirect(`/create/${session.user.id}`);
   }
+  redirect("/");
 }

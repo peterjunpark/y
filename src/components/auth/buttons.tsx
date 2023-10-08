@@ -10,12 +10,12 @@ export function LogInButton() {
   const loginProviders = [
     {
       name: "GitHub",
-      icon: <Github />,
+      icon: <Github className="text-2xl" />,
       oAuthProvider: "github",
     },
     {
       name: "Discord",
-      icon: <Discord />,
+      icon: <Discord className="text-2xl" />,
       oAuthProvider: "discord",
     },
   ];
@@ -27,7 +27,7 @@ export function LogInButton() {
           key={index} // Added key prop for React list rendering
           onClick={() => signIn(oAuthProvider, { callbackUrl: "/home" })}
           variant="default"
-          className="m-2 flex w-80 justify-start gap-3 rounded-full text-[1.1rem]"
+          className="m-2 flex w-[16.9rem] justify-start gap-3 rounded-full"
         >
           {icon}
           Log in or sign up with {name}
