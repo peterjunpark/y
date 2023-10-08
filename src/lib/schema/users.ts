@@ -11,7 +11,7 @@ import type { AdapterAccount } from "@auth/core/adapters";
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
   name: text("name"),
-  email: text("email").notNull(),
+  email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   handle: varchar("handle", { length: 12 }).unique(),
@@ -27,6 +27,7 @@ export const accounts = pgTable(
     provider: text("provider").notNull(),
     providerAccountId: text("providerAccountId").notNull(),
     refresh_token: text("refresh_token"),
+    refresh_token_expires_in: integer("refresh_token_expires_in"),
     access_token: text("access_token"),
     expires_at: integer("expires_at"),
     token_type: text("token_type"),

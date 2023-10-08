@@ -8,6 +8,8 @@ import { users } from "@/lib/schema/users";
 const parseErrorMsg = (error: unknown): string => {
   let message: string;
 
+  console.error(error);
+
   if (error instanceof Error) {
     message = error.message;
   } else if (error && typeof error === "object" && "message" in error) {
@@ -32,7 +34,6 @@ export const handleSubmit = async (formData: FormData) => {
 
     if (result) redirect("/home");
   } catch (err) {
-    console.error(err);
     return { error: parseErrorMsg(err) };
   }
 };

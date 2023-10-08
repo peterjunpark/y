@@ -15,6 +15,20 @@
       "when": 1696718359824,
       "tag": "0001_boring_tyger_tiger",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1696767383848,
+      "tag": "0002_bored_dark_phoenix",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1696769334456,
+      "tag": "0003_high_jack_murdock",
+      "breakpoints": true
     }
   ]
 }

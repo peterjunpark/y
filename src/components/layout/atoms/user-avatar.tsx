@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
 
 export async function UserAvatar() {
   const session = await getServerSession(authOptions);
@@ -16,13 +15,9 @@ export async function UserAvatar() {
           {session?.user?.name?.charAt(0).toUpperCase() ?? " "}
         </AvatarFallback>
       </Avatar>
-      <ul
-        className={cn("hidden flex-col items-start xl:flex", {
-          "justify-center": session?.user?.name === undefined,
-        })}
-      >
-        {session?.user?.name && <li>{session?.user?.name} </li>}
-        <li>@wwwwwwwwwwww</li>
+      <ul className="hidden flex-col items-start justify-center xl:flex">
+        {session?.user?.name && <li>{session?.user?.name}</li>}
+        {session?.user?.handle && <li>@{session?.user?.handle}</li>}
       </ul>
     </div>
   );
