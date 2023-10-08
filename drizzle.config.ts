@@ -1,6 +1,6 @@
 import type { Config } from "drizzle-kit";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config(); // For drizzle studio
 
 export default {
   schema: "./src/lib/schema/*",

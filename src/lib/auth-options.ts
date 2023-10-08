@@ -13,7 +13,6 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
       profile(profile) {
-        console.log(profile);
         return {
           id: profile.id.toString(),
           name: profile.name,

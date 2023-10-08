@@ -5,35 +5,45 @@ import { eq } from "drizzle-orm";
 import { db } from "@/lib/drizzle";
 import { users } from "@/lib/schema/users";
 
-const parseErrorMsg = (error: unknown): string => {
-  let message: string;
+const parseErrorMsg = (error: unknown) => {
+  const err: { message: string; reason: unknown } = {
+    message: "Unknown error",
+    reason: "",
+  };
 
   console.error(error);
 
   if (error instanceof Error) {
-    message = error.message;
+    err.message = error.message;
+    err.reason = error.cause;
   } else if (error && typeof error === "object" && "message" in error) {
-    message = String(error.message);
+    err.message = String(error.message);
   } else if (typeof error === "string") {
-    message = error;
-  } else {
-    message = "Unknown error";
+    err.message = error;
   }
-  return message;
+
+  if (typeof error === "object" && "constraint" in error!) {
+    if (error.constraint === "user_handle_unique") {
+      err.message = "Handle already taken!";
+      err.reason = error.constraint;
+    }
+  }
+  return err;
 };
 
 export const handleSubmit = async (formData: FormData) => {
   const id = formData.get("id") as string;
   const name = formData.get("name") as string;
   const handle = formData.get("handle") as string;
-  try {
-    const result = await db
-      .update(users)
-      .set({ handle: handle })
-      .where(eq(users.id, id));
 
-    if (result) redirect("/home");
+  try {
+    await db
+      .update(users)
+      .set({ handle: handle, name: name })
+      .where(eq(users.id, id));
   } catch (err) {
-    return { error: parseErrorMsg(err) };
+    return parseErrorMsg(err);
   }
+
+  redirect("/home");
 };

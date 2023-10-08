@@ -1,5 +1,6 @@
 "use client";
 
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -60,13 +61,19 @@ export function SignupForm({ defaultName, avatar, userId }: SignupFormProps) {
     }
 
     // Server action
-    const { error } = await handleSubmit(formData);
+    const error = await handleSubmit(formData);
 
-    if (error) {
+    // Case where handle is already taken.
+    if (error && error.reason === "user_handle_unique") {
+      toast({
+        variant: "destructive",
+        title: error.message,
+      });
+    } else if (error) {
       toast({
         variant: "destructive",
         title: "Something went wrong",
-        description: error,
+        description: error?.message,
       });
     }
   };

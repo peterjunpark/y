@@ -1,10 +1,15 @@
 import React from "react";
+import { redirect } from "next/navigation";
 import { SignupForm } from "@/components/signup/form";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 
 export default async function CreateHandle() {
   const session = await getServerSession(authOptions);
+
+  if (session?.user?.handle) {
+    redirect("/home");
+  }
 
   return (
     <div className="flex flex-col items-center lg:items-start">
