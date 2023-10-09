@@ -9,16 +9,19 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { PostForm } from "@/components/post/form";
 import { posts, users, communities } from "@/data";
+import prisma from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Home / Y",
 };
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="h-[5000px]">
       <HomeHeader />
+      <PostForm />
       {posts.map((post, index) => (
         <Card key={index} className="rounded-none">
           <CardHeader>{post.user_id}</CardHeader>

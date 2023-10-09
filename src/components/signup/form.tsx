@@ -1,6 +1,5 @@
 "use client";
 
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -64,7 +63,7 @@ export function SignupForm({ defaultName, avatar, userId }: SignupFormProps) {
     const error = await handleSubmit(formData);
 
     // Case where handle is already taken.
-    if (error && error.reason === "user_handle_unique") {
+    if (error && error.code === "P2002") {
       toast({
         variant: "destructive",
         title: error.message,

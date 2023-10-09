@@ -14,8 +14,8 @@ model Like {
   liker       User   @relation(fields: [likerId], references: [id])
   likedPost   Post   @relation(fields: [likedPostId], references: [id])
 
-  @@id([likerId, likedPostId], map: "userId_postId")
-  @@index([likedPostId], map: "postId_idx")
+  @@id([likerId, likedPostId])
+  @@index([likedPostId])
 }
 
 model Post {
@@ -27,7 +27,7 @@ model Post {
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
 
-  @@index([authorId], map: "authorId_idx")
+  @@index([authorId])
 }
 
 enum MembershipEnum {

@@ -16,7 +16,7 @@ export function UserCard() {
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
-          className="flex justify-between rounded-full px-3 py-7 xl:w-64"
+          className="flex justify-between gap-3 rounded-full py-7 xl:w-64"
         >
           <UserAvatar />
           <MoreVertical className="hidden xl:block" />
