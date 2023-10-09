@@ -5,16 +5,31 @@ import {
   primaryKey,
   integer,
   varchar,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
+import type { InferSelectModel } from "drizzle-orm";
+
+export type User = InferSelectModel<typeof users>;
+
+// Mostly "minimal defaults" provided by next-auth.
+//custom.
+export const membershipEnum = pgEnum("membershipEnum", [
+  "standard",
+  "premium",
+  "turbo",
+]);
 
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
   name: text("name"),
+  // modified to accomodate github oauth provider.
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  // custom.
   handle: varchar("handle", { length: 12 }).unique(),
+  membership: membershipEnum("membership").default("standard").notNull(),
 });
 
 export const accounts = pgTable(
