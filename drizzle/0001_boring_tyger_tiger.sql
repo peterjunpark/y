@@ -1,1 +1,0 @@
-ALTER TABLE "user" ADD CONSTRAINT "user_handle_unique" UNIQUE("handle");

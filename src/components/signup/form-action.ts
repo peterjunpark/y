@@ -1,9 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { eq } from "drizzle-orm";
-import { db } from "@/lib/drizzle";
-import { users } from "@/lib/schema/users";
+import prisma from "@/lib/prisma";
 
 const parseErrorMsg = (error: unknown) => {
   const err: { message: string; reason: unknown } = {
@@ -37,10 +35,10 @@ export const handleSubmit = async (formData: FormData) => {
   const handle = formData.get("handle") as string;
 
   try {
-    await db
-      .update(users)
-      .set({ handle: handle, name: name })
-      .where(eq(users.id, id));
+    await prisma.user.update({
+      where: { id: id },
+      data: { name: name, handle: handle },
+    });
   } catch (err) {
     return parseErrorMsg(err);
   }

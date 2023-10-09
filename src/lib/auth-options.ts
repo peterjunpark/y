@@ -1,25 +1,23 @@
 import { type NextAuthOptions } from "next-auth";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import GithubProvider from "next-auth/providers/github";
 import DiscordProvider from "next-auth/providers/discord";
-import { db } from "./drizzle";
-import { eq } from "drizzle-orm";
-import { users } from "./schema/users";
+import prisma from "@/lib/prisma";
 
 export const authOptions: NextAuthOptions = {
-  adapter: DrizzleAdapter(db),
+  adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
-      profile(profile) {
-        return {
-          id: profile.id.toString(),
-          name: profile.name,
-          email: profile.email,
-          image: profile.avatar_url,
-        };
-      },
+      // profile(profile) {
+      //   return {
+      //     id: profile.id.toString(),
+      //     name: profile.name,
+      //     email: profile.email,
+      //     image: profile.avatar_url,
+      //   };
+      // },
     }),
     DiscordProvider({
       clientId: process.env.DISCORD_ID!,
@@ -31,18 +29,18 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, user }) {
-      const handle = await db
-        .select({ handle: users.handle })
-        .from(users)
-        .where(eq(users.id, user.id));
+      const userDetails = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { handle: true, membership: true },
+      });
 
-      if (handle.length > 0) {
-        session.user = {
-          ...session.user,
-          id: user.id,
-          handle: handle[0].handle,
-        };
-      }
+      session.user = {
+        ...session.user,
+        id: user.id,
+        handle: userDetails?.handle!,
+        membership: userDetails?.membership!,
+      };
+
       return session;
     },
   },
