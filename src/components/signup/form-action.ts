@@ -12,7 +12,7 @@ export const handleSubmit = async (formData: FormData) => {
   try {
     await prisma.user.update({
       where: { id: id },
-      data: { name: name, handle: handle },
+      data: name ? { name: name, handle: handle } : { handle: handle },
     });
   } catch (err) {
     return parsePrismaError(err);

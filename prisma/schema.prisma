@@ -20,8 +20,8 @@ model Like {
 
 model Post {
   id        Int      @id @default(autoincrement())
-  content   Like[]
-  likes     Int      @default(0)
+  content   String
+  likes     Like[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation(fields: [authorId], references: [id])

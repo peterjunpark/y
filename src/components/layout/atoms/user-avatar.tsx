@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { clsx } from "clsx";
+import { cn } from "@/lib/utils";
 
 type UserAvatarProps = {
   hideHandle?: boolean;
@@ -13,7 +13,7 @@ export async function UserAvatar(
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="flex gap-3 ">
+    <div className={cn("w-fit", !hideHandle && "flex gap-3")}>
       <Avatar>
         <AvatarImage src={session?.user?.image!} />
         <AvatarFallback>
@@ -21,7 +21,7 @@ export async function UserAvatar(
         </AvatarFallback>
       </Avatar>
       <ul
-        className={clsx(
+        className={cn(
           "hidden flex-col items-start justify-center",
           !hideHandle && "xl:flex",
         )}
