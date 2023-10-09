@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { handleSubmit } from "./form-action";
+import { handleSubmit } from "./form-action";
 import {
   Form,
   FormControl,
@@ -24,7 +24,7 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
-export function NewPostForm() {
+export function NewPostForm({ authorId }: { authorId: string }) {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,10 +33,24 @@ export function NewPostForm() {
   });
   const { toast } = useToast();
 
-  const onSubmit = (values: FormSchema) => {
+  const onSubmit = async (values: FormSchema) => {
     const formData = new FormData();
     formData.append("content", values.content.trim());
-    alert("posted!");
+    formData.append("authorId", authorId);
+
+    const error = await handleSubmit(formData);
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: error?.message,
+      });
+    } else {
+      toast({
+        title: "Post created",
+      });
+    }
   };
 
   return (

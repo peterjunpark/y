@@ -21,11 +21,14 @@ model Like {
 model Post {
   id        Int      @id @default(autoincrement())
   content   String
+  replies   Post[]   @relation("replies")
+  parent    Post?    @relation("replies", fields: [parentId], references: [id])
+  parentId  Int?     @unique
   likes     Like[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation(fields: [authorId], references: [id])
-  authorId  String
+  authorId  String   @unique
 
   @@index([authorId])
 }

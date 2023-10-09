@@ -5,14 +5,16 @@ import prisma from "@/lib/prisma";
 import { parsePrismaError } from "@/lib/utils";
 
 export const handleSubmit = async (formData: FormData) => {
+  const authorId = formData.get("authorId") as string;
   const content = formData.get("content") as string;
 
   try {
     await prisma.post.create({
-      data: { body: content },
+      data: { content: content, author: { connect: { id: authorId } } },
     });
   } catch (err) {
     console.error(err);
+    return parsePrismaError(err);
   }
 
   // try {
@@ -24,5 +26,5 @@ export const handleSubmit = async (formData: FormData) => {
   //   return parsePrismaError(err);
   // }
 
-  redirect("/home");
+  // redirect("/home");
 };
