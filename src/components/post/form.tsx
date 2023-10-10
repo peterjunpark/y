@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { handleSubmit } from "./form-action";
+import { cn } from "@/lib/utils";
 import {
   Form,
   FormControl,
@@ -33,6 +34,8 @@ export function NewPostForm({ authorId }: { authorId: string }) {
   });
   const { toast } = useToast();
 
+  const charCount = form.watch("content").length;
+
   const onSubmit = async (values: FormSchema) => {
     const formData = new FormData();
     formData.append("content", values.content.trim());
@@ -50,6 +53,7 @@ export function NewPostForm({ authorId }: { authorId: string }) {
       toast({
         title: "Post created",
       });
+      form.reset();
     }
   };
 
@@ -73,9 +77,18 @@ export function NewPostForm({ authorId }: { authorId: string }) {
                   <span>
                     <FormMessage />
                   </span>
-                  <Button type="submit" className="rounded-full">
-                    Post
-                  </Button>
+                  <div className="xs:flex-row xs:gap-4 ml-3 flex flex-col gap-2">
+                    <span
+                      className={cn("text-sm text-muted-foreground", {
+                        "text-destructive": charCount > 200,
+                      })}
+                    >
+                      {charCount}/200
+                    </span>
+                    <Button type="submit" className="rounded-full">
+                      Post
+                    </Button>
+                  </div>
                 </div>
               )}
             </FormItem>
