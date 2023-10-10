@@ -15,6 +15,7 @@ export const handleSubmit = async (formData: FormData) => {
       data: name ? { name: name, handle: handle } : { handle: handle },
     });
   } catch (err) {
+    console.error(err);
     return parsePrismaError(err);
   }
 

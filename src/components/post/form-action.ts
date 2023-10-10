@@ -1,6 +1,6 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { parsePrismaError } from "@/lib/utils";
 
@@ -16,15 +16,5 @@ export const handleSubmit = async (formData: FormData) => {
     console.error(err);
     return parsePrismaError(err);
   }
-
-  // try {
-  //   await prisma.user.update({
-  //     where: { id: id },
-  //     data: { name: name, handle: handle },
-  //   });
-  // } catch (err) {
-  //   return parsePrismaError(err);
-  // }
-
-  // redirect("/home");
+  revalidatePath("/home");
 };
