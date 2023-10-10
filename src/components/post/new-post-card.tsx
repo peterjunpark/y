@@ -3,7 +3,7 @@ import { Card } from "../ui/card";
 import { UserAvatar } from "../user/avatar";
 import { NewPostForm } from "./form";
 
-export async function NewPostCard() {
+export async function NewPostCard({ replyTo }: { replyTo?: number }) {
   const { image } = await getCurrentUser();
 
   return (
@@ -11,7 +11,7 @@ export async function NewPostCard() {
       <span className="hidden pt-2 sm:block">
         <UserAvatar image={image} />
       </span>
-      <NewPostForm />
+      <NewPostForm variant="compact" replyTo={replyTo} />
     </Card>
   );
 }

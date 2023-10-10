@@ -2,8 +2,10 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./auth-options";
 import { redirect } from "next/navigation";
+import { authOptions } from "./auth-options";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -39,4 +41,11 @@ export const getCurrentUser = async () => {
     handle: session.user.handle as string,
     image: session.user.image,
   };
+};
+
+dayjs.extend(relativeTime);
+
+export const formatTimestamp = (timestamp: Date, diff?: "diff"): string => {
+  if (diff) return dayjs().to(dayjs(timestamp));
+  return dayjs(timestamp).format("MMM D, YYYY h:mm A");
 };

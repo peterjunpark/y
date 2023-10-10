@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { redirect } from "next/navigation";
 import { SignupForm } from "@/components/signup/form";
 import { getServerSession } from "next-auth";

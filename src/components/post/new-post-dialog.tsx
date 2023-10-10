@@ -53,7 +53,7 @@ export function NewPostDialog() {
           <span className="hidden pt-2 sm:block">
             <UserAvatar image={session?.user.image} />
           </span>
-          <NewPostForm isDialog />
+          <NewPostForm />
         </Card>
       </DialogContent>
     </Dialog>

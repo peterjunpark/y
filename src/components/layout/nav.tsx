@@ -11,11 +11,6 @@ export async function Nav() {
   const navItems = [
     { name: "Home", href: "/home", icon: <Home className="my-[0.175rem]" /> },
     {
-      name: "Explore",
-      href: "/explore",
-      icon: <Search className="my-[0.175rem]" />,
-    },
-    {
       name: "Bookmarks",
       href: "/bookmarks",
       icon: <Bookmark className="my-[0.175rem]" />,

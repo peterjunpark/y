@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-type Tab = "for-you" | "following";
+type Tab = "explore" | "following";
 
 export function HomeHeader() {
-  const [tab, setTab] = useState<Tab>("for-you");
+  const [tab, setTab] = useState<Tab>("explore");
 
   return (
     <div className="h-30 back sticky top-0 z-50 backdrop-blur-md">
@@ -16,11 +16,11 @@ export function HomeHeader() {
         <Button
           variant="ghost"
           className={cn("w-full rounded-none py-6 text-base font-semibold", {
-            "underline underline-offset-8": tab === "for-you",
+            "underline underline-offset-8": tab === "explore",
           })}
-          onClick={() => setTab("for-you")}
+          onClick={() => setTab("explore")}
         >
-          For you
+          Explore
         </Button>
         <Button
           variant="ghost"

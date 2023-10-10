@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,7 +27,12 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
-export function NewPostForm({ isDialog }: { isDialog?: boolean }) {
+type NewPostFormProps = {
+  variant?: "compact";
+  replyTo?: number;
+};
+
+export function NewPostForm({ variant, replyTo }: NewPostFormProps) {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,12 +41,14 @@ export function NewPostForm({ isDialog }: { isDialog?: boolean }) {
   });
   const { toast } = useToast();
   const { setOpen } = useNewPostDialog();
+  const pathname = usePathname();
 
   const charCount = form.watch("content").length;
 
   const onSubmit = async (values: FormSchema) => {
     const formData = new FormData();
     formData.append("content", values.content.trim());
+    // if (variant === "reply") formData.append("replyTo");
 
     const error = await handleSubmit(formData);
 
@@ -61,7 +69,7 @@ export function NewPostForm({ isDialog }: { isDialog?: boolean }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full p-2">
         <FormField
           control={form.control}
           name="content"
@@ -69,12 +77,14 @@ export function NewPostForm({ isDialog }: { isDialog?: boolean }) {
             <FormItem className="w-full">
               <FormControl>
                 <Textarea
-                  placeholder="What's going on? ..."
+                  placeholder={
+                    replyTo ? "Reply to this post ..." : "What's going on? ..."
+                  }
                   {...field}
                   className="resize-none"
                 />
               </FormControl>
-              {(charCount > 0 || isDialog) && (
+              {(charCount > 0 || !variant) && (
                 <div className="flex justify-between p-1">
                   <span>
                     <FormMessage />
@@ -92,7 +102,7 @@ export function NewPostForm({ isDialog }: { isDialog?: boolean }) {
                       className="rounded-full"
                       disabled={form.formState.isSubmitting}
                     >
-                      Post
+                      {replyTo ? "Reply" : "Post"}
                     </Button>
                   </div>
                 </div>
