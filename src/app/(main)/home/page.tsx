@@ -1,36 +1,49 @@
 import React from "react";
 import type { Metadata } from "next";
-import { HomeHeader } from "../../../components/home/header";
-import {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { posts, users, communities } from "@/data";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import prisma from "@/lib/prisma";
+import { formatTimestamp } from "@/lib/utils";
+import { HomeHeader } from "@/components/home/header";
+import { NewPostCard } from "@/components/post/new-post-card";
+import { PostCard } from "@/components/post/post-card";
 
 export const metadata: Metadata = {
   title: "Home / Y",
 };
 
-export default function Home() {
+export default async function Home() {
+  const posts = await prisma.post.findMany({
+    where: { parent: null },
+    include: {
+      author: true,
+      _count: { select: { likes: true, replies: true } },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+
+  if (!posts) notFound();
+
   return (
-    <div className="h-[5000px]">
+    <>
       <HomeHeader />
+      <NewPostCard />
       {posts.map((post, index) => (
-        <Card key={index} className="rounded-none">
-          <CardHeader>{post.user_id}</CardHeader>
-          <CardDescription>This is a card descriptio</CardDescription>
-          <CardContent>{post.body}</CardContent>
-          <CardFooter>This is a card footer</CardFooter>
-        </Card>
+        <Link key={index} href={`/${post.author.handle}/post/${post.id}`}>
+          <PostCard
+            variant="compact"
+            content={post.content}
+            postId={post.id}
+            authorId={post.authorId}
+            authorName={post.author.name!}
+            authorHandle={post.author.handle!}
+            authorImage={post.author.image!}
+            timestamp={formatTimestamp(post.updatedAt, "diff")}
+            likesCount={post._count.likes}
+            repliesCount={post._count.replies}
+          />
+        </Link>
       ))}
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus nobis
-      nulla eius perspiciatis eveniet ea minus iste, dignissimos aspernatur
-      earum esse commodi consectetur nisi! Quo voluptatum recusandae qui alias
-      eaque.
-    </div>
+    </>
   );
 }

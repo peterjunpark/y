@@ -1,5 +1,5 @@
 import React from "react";
-import { Logo } from "@/components/layout/atoms/logo";
+import { Logo } from "@/components/logo";
 
 export default function GatewayLayout({
   children,

@@ -7,7 +7,7 @@ import { authOptions } from "@/lib/auth-options";
 export default async function CreateHandle() {
   const session = await getServerSession(authOptions);
 
-  if (session?.user?.handle) {
+  if (session && session.user.handle) {
     redirect("/home");
   }
 
@@ -20,7 +20,7 @@ export default async function CreateHandle() {
       <SignupForm
         defaultName={session?.user.name as string}
         userId={session?.user.id as string}
-        avatar={session?.user.image as string}
+        image={session?.user.image as string}
       />
     </div>
   );

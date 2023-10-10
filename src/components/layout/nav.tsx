@@ -1,18 +1,15 @@
 import React from "react";
 import Link from "next/link";
-import { UserCard } from "./user-card";
-import { Logo } from "../atoms/logo";
+import { getCurrentUser } from "@/lib/utils";
+import { UserCard } from "../user/card";
+import { Logo } from "../logo";
 import { Button } from "@/components/ui/button";
-import { Home, Search, Bookmark, Users2, User2, Feather } from "lucide-react";
+import { NewPostDialog } from "@/components/post/new-post-dialog";
+import { Home, Search, Bookmark, Users2, User2 } from "lucide-react";
 
-export function Nav() {
+export async function Nav() {
   const navItems = [
     { name: "Home", href: "/home", icon: <Home className="my-[0.175rem]" /> },
-    {
-      name: "Explore",
-      href: "/explore",
-      icon: <Search className="my-[0.175rem]" />,
-    },
     {
       name: "Bookmarks",
       href: "/bookmarks",
@@ -49,6 +46,7 @@ export function Nav() {
               key={index}
               className="justify-start rounded-full text-xl"
               variant="ghost"
+              asChild
             >
               <Link href={item.href} className="flex items-center gap-3">
                 {item.icon}
@@ -56,10 +54,7 @@ export function Nav() {
               </Link>
             </Button>
           ))}
-          <Button className="mt-2 rounded-full text-lg xl:w-52">
-            <span className="hidden xl:block">Post</span>
-            <Feather className="block xl:hidden" />
-          </Button>
+          <NewPostDialog />
         </nav>
       </div>
       <UserCard />

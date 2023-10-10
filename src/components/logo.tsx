@@ -1,10 +1,9 @@
 import React from "react";
-import Link from "next/link";
 import localFont from "next/font/local";
 import { cn } from "@/lib/utils";
 
 const xFont = localFont({
-  src: "../../../../public/special-alphabets-4-regular.otf",
+  src: "../../public/special-alphabets-4-regular.otf",
   weight: "600",
   display: "swap",
   style: "normal",

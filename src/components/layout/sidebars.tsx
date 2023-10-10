@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Nav } from "./molecules/nav";
+import { Nav } from "./nav";
 
 export function Sidebars({ children }: { children: React.ReactNode }) {
   return (

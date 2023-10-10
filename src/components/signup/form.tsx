@@ -1,6 +1,5 @@
 "use client";
 
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,16 +12,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Logo } from "../layout/atoms/logo";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
+import { Logo } from "../logo";
+import { UserAvatar } from "../user/avatar";
 
 type SignupFormProps = {
   defaultName: string;
-  avatar: string;
+  image: string;
   userId: string;
 };
 
@@ -42,7 +41,7 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
-export function SignupForm({ defaultName, avatar, userId }: SignupFormProps) {
+export function SignupForm({ defaultName, image, userId }: SignupFormProps) {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,7 +51,7 @@ export function SignupForm({ defaultName, avatar, userId }: SignupFormProps) {
   });
   const { toast } = useToast();
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: FormSchema) => {
     const formData = new FormData();
     formData.append("handle", values.handle.trim());
     formData.append("id", userId);
@@ -64,7 +63,7 @@ export function SignupForm({ defaultName, avatar, userId }: SignupFormProps) {
     const error = await handleSubmit(formData);
 
     // Case where handle is already taken.
-    if (error && error.reason === "user_handle_unique") {
+    if (error && error.code === "P2002") {
       toast({
         variant: "destructive",
         title: error.message,
@@ -121,12 +120,7 @@ export function SignupForm({ defaultName, avatar, userId }: SignupFormProps) {
           )}
         />
         <div className="flex gap-4">
-          {avatar && (
-            <Avatar>
-              <AvatarImage src={avatar} />
-              <AvatarFallback></AvatarFallback>
-            </Avatar>
-          )}
+          {image && <UserAvatar image={image} />}
           <Button type="submit" className="rounded-full">
             Submit
           </Button>

@@ -1,4 +1,4 @@
-import { FullPageLoading } from "@/components/layout/full-page-loading";
+import { FullPageLoading } from "@/components/full-page-loading";
 
 export default function Loading() {
   return <FullPageLoading />;
