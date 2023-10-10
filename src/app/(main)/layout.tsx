@@ -1,8 +1,9 @@
 import React from "react";
+import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth-options";
 import { Sidebars } from "@/components/layout/sidebars";
-import { redirect } from "next/navigation";
+import { NewPostDialogProvider } from "@/components/post/new-post-dialog";
 
 export default async function AppLayout({
   children,
@@ -13,7 +14,11 @@ export default async function AppLayout({
 
   if (session) {
     if (session.user.handle) {
-      return <Sidebars>{children}</Sidebars>;
+      return (
+        <NewPostDialogProvider>
+          <Sidebars>{children}</Sidebars>
+        </NewPostDialogProvider>
+      );
     }
     redirect(`/create/${session.user.id}`);
   }

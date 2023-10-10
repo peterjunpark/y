@@ -1,11 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { handleSubmit } from "./form-action";
 import { cn } from "@/lib/utils";
+import { useNewPostDialog } from "./new-post-dialog";
 import {
   Form,
   FormControl,
@@ -27,7 +27,6 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 export function NewPostForm({ isDialog }: { isDialog?: boolean }) {
-  const router = useRouter();
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,6 +34,7 @@ export function NewPostForm({ isDialog }: { isDialog?: boolean }) {
     },
   });
   const { toast } = useToast();
+  const { setOpen } = useNewPostDialog();
 
   const charCount = form.watch("content").length;
 
@@ -55,7 +55,7 @@ export function NewPostForm({ isDialog }: { isDialog?: boolean }) {
         title: "Post created",
       });
       form.reset();
-      isDialog && router.refresh();
+      setOpen(false);
     }
   };
 
@@ -79,7 +79,7 @@ export function NewPostForm({ isDialog }: { isDialog?: boolean }) {
                   <span>
                     <FormMessage />
                   </span>
-                  <div className="xs:flex-row xs:gap-4 ml-3 flex flex-col gap-2">
+                  <div className="ml-3 flex flex-col gap-2 xs:flex-row xs:gap-4">
                     <span
                       className={cn("text-sm text-muted-foreground", {
                         "text-destructive": charCount > 200,
@@ -87,7 +87,11 @@ export function NewPostForm({ isDialog }: { isDialog?: boolean }) {
                     >
                       {charCount}/200
                     </span>
-                    <Button type="submit" className="rounded-full">
+                    <Button
+                      type="submit"
+                      className="rounded-full"
+                      disabled={form.formState.isSubmitting}
+                    >
                       Post
                     </Button>
                   </div>

@@ -8,7 +8,7 @@ type UserAvatarProps = {
   image: string | null | undefined;
 };
 
-export async function UserAvatar({ name, image, handle }: UserAvatarProps) {
+export function UserAvatar({ name, image, handle }: UserAvatarProps) {
   return (
     <div className={cn("w-fit", name && handle && "flex gap-3")}>
       <Avatar>
