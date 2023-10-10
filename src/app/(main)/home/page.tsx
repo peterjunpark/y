@@ -20,7 +20,7 @@ export default async function Home() {
   });
 
   return (
-    <div className="h-[5000px]">
+    <>
       <HomeHeader />
       <NewPostCard />
       {posts.map((post, index) => (
@@ -37,6 +37,6 @@ export default async function Home() {
           repliesCount={post._count.replies}
         />
       ))}
-    </div>
+    </>
   );
 }

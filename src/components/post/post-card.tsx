@@ -48,7 +48,7 @@ export function PostCard({
           <AvatarImage src={authorImage} />
           <AvatarFallback>{authorName.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
-        <CardHeader className="px-3 sm:flex-row sm:items-center sm:gap-3">
+        <CardHeader className="px-3 pt-[1.1rem] sm:flex-row sm:items-center sm:gap-3">
           {authorName}{" "}
           <CardDescription>
             @{authorHandle} ·{" "}
@@ -56,15 +56,15 @@ export function PostCard({
           </CardDescription>
         </CardHeader>
       </div>
-      <CardContent>
+      <CardContent className="pb-[0.65rem]">
         <p className="break-inside-auto hyphens-auto break-words">{content}</p>
       </CardContent>
-      <CardFooter className="flex justify-around pb-1">
-        <Button variant="ghost" className="flex">
-          {likesCount} <Heart className="ml-2" />
-        </Button>
+      <CardFooter className="flex justify-end gap-5 pb-[0.08rem]">
         <Button variant="ghost" className="flex">
           {repliesCount} <MessageCircle className="ml-2" />
+        </Button>
+        <Button variant="ghost" className="flex">
+          {likesCount} <Heart className="ml-2" />
         </Button>
       </CardFooter>
     </Card>

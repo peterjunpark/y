@@ -15,13 +15,13 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { useToast } from "../ui/use-toast";
-import { Logo } from "../layout/atoms/logo";
+import { Logo } from "../logo";
+import { UserAvatar } from "../user/avatar";
 
 type SignupFormProps = {
   defaultName: string;
-  avatar: string;
+  image: string;
   userId: string;
 };
 
@@ -41,7 +41,7 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
-export function SignupForm({ defaultName, avatar, userId }: SignupFormProps) {
+export function SignupForm({ defaultName, image, userId }: SignupFormProps) {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -120,12 +120,7 @@ export function SignupForm({ defaultName, avatar, userId }: SignupFormProps) {
           )}
         />
         <div className="flex gap-4">
-          {avatar && (
-            <Avatar>
-              <AvatarImage src={avatar} />
-              <AvatarFallback></AvatarFallback>
-            </Avatar>
-          )}
+          {image && <UserAvatar image={image} />}
           <Button type="submit" className="rounded-full">
             Submit
           </Button>

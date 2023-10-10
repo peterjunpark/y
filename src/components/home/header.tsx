@@ -10,7 +10,7 @@ export function HomeHeader() {
   const [tab, setTab] = useState<Tab>("for-you");
 
   return (
-    <div className="h-30 back sticky top-0 backdrop-blur-md">
+    <div className="h-30 back sticky top-0 z-50 backdrop-blur-md">
       <h1 className="p-3 text-xl font-semibold">Home</h1>
       <div className="flex justify-around">
         <Button

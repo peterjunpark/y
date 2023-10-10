@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +26,8 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
-export function NewPostForm({ authorId }: { authorId: string }) {
+export function NewPostForm({ isDialog }: { isDialog?: boolean }) {
+  const router = useRouter();
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,7 +41,6 @@ export function NewPostForm({ authorId }: { authorId: string }) {
   const onSubmit = async (values: FormSchema) => {
     const formData = new FormData();
     formData.append("content", values.content.trim());
-    formData.append("authorId", authorId);
 
     const error = await handleSubmit(formData);
 
@@ -54,6 +55,7 @@ export function NewPostForm({ authorId }: { authorId: string }) {
         title: "Post created",
       });
       form.reset();
+      isDialog && router.refresh();
     }
   };
 
@@ -72,7 +74,7 @@ export function NewPostForm({ authorId }: { authorId: string }) {
                   className="resize-none"
                 />
               </FormControl>
-              {form.getValues("content") && (
+              {(charCount > 0 || isDialog) && (
                 <div className="flex justify-between p-1">
                   <span>
                     <FormMessage />

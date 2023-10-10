@@ -10,14 +10,6 @@ export const authOptions: NextAuthOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
-      // profile(profile) {
-      //   return {
-      //     id: profile.id.toString(),
-      //     name: profile.name,
-      //     email: profile.email,
-      //     image: profile.avatar_url,
-      //   };
-      // },
     }),
     DiscordProvider({
       clientId: process.env.DISCORD_ID!,
