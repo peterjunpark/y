@@ -46,7 +46,7 @@ export function NewPostForm({ variant, replyTo }: NewPostFormProps) {
   const onSubmit = async (values: FormSchema) => {
     const formData = new FormData();
     formData.append("content", values.content.trim());
-    // if (variant === "reply") formData.append("replyTo");
+    if (replyTo) formData.append("replyTo", replyTo.toString());
 
     const error = await handleSubmit(formData);
 

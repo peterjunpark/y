@@ -80,15 +80,27 @@ export function PostCard({
         )}
       </CardContent>
       <CardFooter className="flex justify-around gap-5 py-[0.1rem] xs:justify-end">
-        <Button variant="ghost" className="flex hover:text-blue-500">
+        <Button
+          variant="ghost"
+          className={cn("flex hover:bg-transparent", {
+            "hover:bg-sky-100 hover:text-blue-500 dark:hover:bg-opacity-10":
+              variant === "compact",
+          })}
+        >
           {repliesCount} <MessageCircle className="ml-2 rounded-full" />
         </Button>
         {variant !== "compact" && (
-          <Button variant="ghost" className="flex hover:text-emerald-500">
+          <Button
+            variant="ghost"
+            className="flex hover:bg-green-100 hover:text-emerald-600 dark:hover:bg-opacity-10"
+          >
             {likesCount} <Bookmark className="ml-2" />
           </Button>
         )}
-        <Button variant="ghost" className="flex hover:text-pink-500">
+        <Button
+          variant="ghost"
+          className="flex hover:bg-pink-100 hover:text-pink-500 dark:hover:bg-opacity-10"
+        >
           {likesCount} <Heart className="ml-2" />
         </Button>
       </CardFooter>
