@@ -66,7 +66,9 @@ export function PostCard({
             </CardDescription>
           ) : (
             <CardDescription>
-              @{authorHandle} · {timestamp}
+              <span>@{authorHandle}</span>
+              <span className="hidden xs:inline"> · </span>
+              <span className="mt-1 block xs:mt-0 xs:inline">{timestamp}</span>
             </CardDescription>
           )}
         </CardHeader>
@@ -77,7 +79,7 @@ export function PostCard({
           <CardDescription className="pt-6">{timestamp}</CardDescription>
         )}
       </CardContent>
-      <CardFooter className="flex justify-end gap-5 pb-[0.08rem]">
+      <CardFooter className="flex justify-around gap-5 py-[0.1rem] xs:justify-end">
         <Button variant="ghost" className="flex hover:text-blue-500">
           {repliesCount} <MessageCircle className="ml-2 rounded-full" />
         </Button>

@@ -31,8 +31,8 @@ export default async function PostPage({
   if (post.author.handle !== params.handle)
     redirect(`/${post.author.handle}/post/${postId}`);
 
-  const isReply = post.parentId !== null ? true : false;
-  const isParent = post.replies.length > 0 ? true : false;
+  const isReply = post.parentId !== null;
+  const isParent = post.replies.length > 0;
 
   return (
     <>

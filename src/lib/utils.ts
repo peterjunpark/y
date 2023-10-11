@@ -46,6 +46,6 @@ export const getCurrentUser = async () => {
 dayjs.extend(relativeTime);
 
 export const formatTimestamp = (timestamp: Date, diff?: "diff"): string => {
-  if (diff) return dayjs().to(dayjs(timestamp));
+  if (diff) return dayjs(timestamp).fromNow();
   return dayjs(timestamp).format("MMM D, YYYY h:mm A");
 };
