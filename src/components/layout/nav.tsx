@@ -5,7 +5,7 @@ import { UserCard } from "../user/card";
 import { Logo } from "../logo";
 import { Button } from "@/components/ui/button";
 import { NewPostDialog } from "@/components/post/new-post-dialog";
-import { Home, Search, Bookmark, Users2, User2 } from "lucide-react";
+import { Home, Bookmark, Shirt, User2 } from "lucide-react";
 
 export async function Nav() {
   const navItems = [
@@ -16,9 +16,9 @@ export async function Nav() {
       icon: <Bookmark className="my-[0.175rem]" />,
     },
     {
-      name: "Communities",
-      href: "/communities",
-      icon: <Users2 className="my-[0.175rem]" />,
+      name: "Threads",
+      href: "/threads",
+      icon: <Shirt className="my-[0.175rem]" />,
     },
     {
       name: "Premium",

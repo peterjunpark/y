@@ -14,7 +14,6 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const posts = await prisma.post.findMany({
-    where: { parent: null },
     include: {
       author: true,
       _count: { select: { likes: true, replies: true } },
@@ -29,7 +28,10 @@ export default async function Home() {
       <HomeHeader />
       <NewPostCard />
       {posts.map((post, index) => (
-        <Link key={index} href={`/${post.author.handle}/post/${post.id}`}>
+        <Link
+          key={index}
+          href={`/${post.author.handle}/${post.threadId}/${post.id}#main`}
+        >
           <PostCard
             variant="compact"
             content={post.content}

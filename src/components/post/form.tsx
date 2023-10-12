@@ -29,9 +29,10 @@ type FormSchema = z.infer<typeof formSchema>;
 type NewPostFormProps = {
   variant?: "compact";
   replyTo?: number;
+  thread?: number;
 };
 
-export function NewPostForm({ variant, replyTo }: NewPostFormProps) {
+export function NewPostForm({ variant, replyTo, thread }: NewPostFormProps) {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,6 +48,7 @@ export function NewPostForm({ variant, replyTo }: NewPostFormProps) {
     const formData = new FormData();
     formData.append("content", values.content.trim());
     if (replyTo) formData.append("replyTo", replyTo.toString());
+    if (thread) formData.append("thread", thread.toString());
 
     const error = await handleSubmit(formData);
 
