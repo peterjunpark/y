@@ -36,8 +36,6 @@ export const handleLikeOrBookmark = async (
     };
   }
 
-  console.log(interactions);
-
   try {
     if (interactions.likedPostId) {
       await prisma.like.create({
@@ -64,6 +62,7 @@ export const handleLikeOrBookmark = async (
           bookmarkedPostId: interactions.bookmarkedPostId,
         },
       });
+      revalidatePath("/bookmarks");
       return { success: "bookmarked" };
     } else if (interactions.unbookmarkedPostId) {
       await prisma.bookmark.delete({
@@ -74,6 +73,7 @@ export const handleLikeOrBookmark = async (
           },
         },
       });
+      revalidatePath("/bookmarks");
       return { success: "unbookmarked" };
     }
   } catch (err) {

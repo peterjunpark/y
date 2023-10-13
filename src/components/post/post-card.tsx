@@ -22,7 +22,7 @@ type PostCardProps = {
   authorData: AuthorData;
   interactionsData: InteractionsData;
   variant?: "compact";
-  pageVariant?: "thread";
+  pageVariant?: "thread" | "bookmark";
   currentUserId: string;
 };
 
@@ -137,7 +137,7 @@ export function PostCard({
               />
             </>
           )}
-          {variant !== "compact" && (
+          {(pageVariant === "bookmark" || variant !== "compact") && (
             <BookmarkButton
               postId={postId}
               currentUserId={currentUserId}
