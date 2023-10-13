@@ -42,7 +42,7 @@ export default async function PostPage({
       replies: {
         // Get replies under the main post.
         include: getPostIncludeParams(currentUserId, ["likes", "replies"]),
-        orderBy: { updatedAt: "desc" }, // Order replies by latest first.
+        orderBy: { updatedAt: "asc" }, // Order replies by latest first.
       },
     },
   });
@@ -135,48 +135,48 @@ export default async function PostPage({
             thread={threadId}
           />
         </div>
-
-        {post.replies.map((reply, index) => (
-          <Link
-            href={`/${reply.author.handle}/${reply.threadId}/${reply.id}#main`}
-            key={index}
-            className="w-full"
-          >
-            <PostCard
-              variant="compact"
-              currentUserId={currentUserId}
-              postData={
-                {
-                  content: reply.content,
-                  postId: reply.id,
-                  timestamp: formatTimestamp(reply.updatedAt, "diff"),
-                } satisfies PostData
-              }
-              threadData={
-                {
-                  threadId: reply.threadId!,
-                } satisfies ThreadData
-              }
-              authorData={
-                {
-                  authorId: reply.authorId,
-                  authorName: reply.author.name!,
-                  authorHandle: reply.author.handle!,
-                  authorImage: reply.author.image!,
-                } satisfies AuthorData
-              }
-              interactionsData={
-                {
-                  likesCount: reply._count.likes,
-                  repliesCount: reply._count.replies,
-                  isLikedByCurrentUser: reply.likes.length > 0,
-                  isBookmarkedByCurrentUser: reply.bookmarks.length > 0,
-                } satisfies InteractionsData
-              }
-            />
-          </Link>
-        ))}
-
+        <div className="flex flex-col-reverse">
+          {post.replies.map((reply, index) => (
+            <Link
+              href={`/${reply.author.handle}/${reply.threadId}/${reply.id}#main`}
+              key={index}
+              className="w-full"
+            >
+              <PostCard
+                variant="compact"
+                currentUserId={currentUserId}
+                postData={
+                  {
+                    content: reply.content,
+                    postId: reply.id,
+                    timestamp: formatTimestamp(reply.updatedAt, "diff"),
+                  } satisfies PostData
+                }
+                threadData={
+                  {
+                    threadId: reply.threadId!,
+                  } satisfies ThreadData
+                }
+                authorData={
+                  {
+                    authorId: reply.authorId,
+                    authorName: reply.author.name!,
+                    authorHandle: reply.author.handle!,
+                    authorImage: reply.author.image!,
+                  } satisfies AuthorData
+                }
+                interactionsData={
+                  {
+                    likesCount: reply._count.likes,
+                    repliesCount: reply._count.replies,
+                    isLikedByCurrentUser: reply.likes.length > 0,
+                    isBookmarkedByCurrentUser: reply.bookmarks.length > 0,
+                  } satisfies InteractionsData
+                }
+              />
+            </Link>
+          ))}
+        </div>
         <div className="flex w-full justify-center py-10 text-muted-foreground">
           <p>No {post.replies.length > 0 && "more "}direct replies</p>
         </div>

@@ -22,30 +22,6 @@ export const handleSubmit = async (formData: FormData) => {
     // Case: REPLY
     // For a post to be a reply, it must have a replyToId (parentId) and be in an existing thread.
     if (replyToId && threadId) {
-      const parent = await prisma.post.findUnique({
-        where: { id: replyToId },
-        select: {
-          _count: { select: { replies: true } },
-        },
-      });
-
-      // If the post we're replying to has other replies,
-      // i.e., this new reply will have sibling replies,
-      // we must create a new thread.
-      if (parent && parent._count.replies > 0) {
-        await prisma.thread.create({
-          data: {
-            posts: {
-              create: {
-                content: content,
-                author: { connect: { id: authorId } },
-                parent: { connect: { id: replyToId } },
-              },
-            },
-          },
-        });
-      }
-
       await prisma.post.create({
         data: {
           content: content,
@@ -59,6 +35,7 @@ export const handleSubmit = async (formData: FormData) => {
           parent: { select: { threadId: true } },
         },
       });
+      // }
     } else {
       // CASE: NOT REPLY
       // If the post is not a reply, we must create a new thread.

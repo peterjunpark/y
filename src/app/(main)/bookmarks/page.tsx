@@ -29,57 +29,59 @@ export default async function Bookmarks() {
         ]),
       },
     },
-    orderBy: { bookmarkedPostId: "desc" },
+    orderBy: { bookmarkedPostId: "asc" },
   });
 
   return (
     <>
       <Header title="Bookmarks" />
-      {bookmarks.map((bookmark, index) => {
-        const post = bookmark.bookmarkedPost;
+      <div className="flex flex-col-reverse">
+        {bookmarks.map((bookmark, index) => {
+          const post = bookmark.bookmarkedPost;
 
-        return (
-          <Link
-            key={index}
-            href={`/${post.author.handle}/${post.threadId}/${post.id}#main`}
-          >
-            <PostCard
-              pageVariant="bookmark"
-              variant="compact"
-              currentUserId={currentUserId}
-              postData={
-                {
-                  content: post.content,
-                  postId: post.id,
-                  timestamp: formatTimestamp(post.updatedAt, "diff"),
-                } satisfies PostData
-              }
-              threadData={
-                {
-                  threadId: post.threadId!,
-                } satisfies ThreadData
-              }
-              authorData={
-                {
-                  authorId: post.authorId,
-                  authorName: post.author.name!,
-                  authorHandle: post.author.handle!,
-                  authorImage: post.author.image!,
-                } satisfies AuthorData
-              }
-              interactionsData={
-                {
-                  likesCount: post._count.likes,
-                  repliesCount: post._count.replies,
-                  bookmarksCount: post._count.bookmarks,
-                  isLikedByCurrentUser: post.likes.length > 0,
-                  isBookmarkedByCurrentUser: post.bookmarks.length > 0,
-                } satisfies InteractionsData
-              }
-            />
-          </Link>
-        );
-      })}
+          return (
+            <Link
+              key={index}
+              href={`/${post.author.handle}/${post.threadId}/${post.id}#main`}
+            >
+              <PostCard
+                pageVariant="bookmark"
+                variant="compact"
+                currentUserId={currentUserId}
+                postData={
+                  {
+                    content: post.content,
+                    postId: post.id,
+                    timestamp: formatTimestamp(post.updatedAt, "diff"),
+                  } satisfies PostData
+                }
+                threadData={
+                  {
+                    threadId: post.threadId!,
+                  } satisfies ThreadData
+                }
+                authorData={
+                  {
+                    authorId: post.authorId,
+                    authorName: post.author.name!,
+                    authorHandle: post.author.handle!,
+                    authorImage: post.author.image!,
+                  } satisfies AuthorData
+                }
+                interactionsData={
+                  {
+                    likesCount: post._count.likes,
+                    repliesCount: post._count.replies,
+                    bookmarksCount: post._count.bookmarks,
+                    isLikedByCurrentUser: post.likes.length > 0,
+                    isBookmarkedByCurrentUser: post.bookmarks.length > 0,
+                  } satisfies InteractionsData
+                }
+              />
+            </Link>
+          );
+        })}
+      </div>
       <div className="flex w-full justify-center py-10 text-muted-foreground">
         <p>No more bookmarks</p>
       </div>
