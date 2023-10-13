@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { handleSubmit } from "./form-action";
 import { cn } from "@/lib/utils";
-import { useNewPostDialog } from "./new-post-dialog";
+import { useNewPostDialog } from "./new-post-dialog-context";
 import {
   Form,
   FormControl,
@@ -60,7 +60,7 @@ export function NewPostForm({ variant, replyTo, thread }: NewPostFormProps) {
       });
     } else {
       toast({
-        title: "Post created",
+        title: replyTo ? "Post created" : "Thread created",
       });
       form.reset();
       setOpen(false);

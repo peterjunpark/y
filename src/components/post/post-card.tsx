@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -7,46 +6,81 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { TooltipProvider } from "../ui/tooltip";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Heart, MessageCircle, Bookmark, Shirt } from "lucide-react";
+import {
+  FollowButton,
+  ReplyButton,
+  LikeButton,
+  BookmarkButton,
+  ThreadButton,
+} from "@/components/post/interactions/buttons";
 
 type PostCardProps = {
+  postData: PostData;
+  threadData: ThreadData;
+  authorData: AuthorData;
+  interactionsData: InteractionsData;
+  variant?: "compact";
+  pageVariant?: "thread";
+  currentUserId: string;
+};
+
+type PostData = {
   content: string;
-  postId?: number;
+  postId: number;
+  timestamp: string;
+};
+
+type ThreadData = {
+  threadId: number;
+  threadCount?: number;
+};
+
+type AuthorData = {
   authorId: string;
   authorName: string;
   authorHandle: string;
   authorImage: string;
-  timestamp: string;
-  likesCount: number;
-  repliesCount: number;
-  bookmarksCount?: number;
-  threadId: number;
-  variant?: "compact";
-  authorIsCurrentUser?: boolean;
 };
 
+type InteractionsData = {
+  likesCount?: number;
+  repliesCount?: number;
+  bookmarksCount?: number;
+  isLikedByCurrentUser: boolean;
+  isBookmarkedByCurrentUser: boolean;
+};
+
+export type { PostData, ThreadData, AuthorData, InteractionsData };
+
 export function PostCard({
-  content,
-  authorId,
-  authorName,
-  authorHandle,
-  authorImage,
-  timestamp,
-  likesCount,
-  repliesCount,
-  bookmarksCount,
-  threadId,
   variant,
-  authorIsCurrentUser,
+  pageVariant,
+  currentUserId,
+  postData: { content, postId, timestamp },
+  threadData: { threadCount, threadId },
+  authorData: { authorId, authorName, authorHandle, authorImage },
+  interactionsData: {
+    likesCount,
+    repliesCount,
+    bookmarksCount,
+    isLikedByCurrentUser,
+    isBookmarkedByCurrentUser,
+  },
 }: PostCardProps) {
   return (
     <Card
-      className={cn("w-full rounded-none px-2", {
-        "transition-colors duration-100 ease-in-out hover:bg-muted":
-          variant === "compact",
-      })}
+      className={cn(
+        "w-full rounded-none px-2",
+        {
+          "transition-colors duration-100 ease-in-out hover:bg-muted":
+            variant === "compact",
+        },
+        {
+          "bg-stone-50 dark:bg-stone-950": variant !== "compact",
+        },
+      )}
       data-author-id={authorId}
     >
       <div className="relative flex items-center pt-[0.4rem]">
@@ -54,18 +88,16 @@ export function PostCard({
           <AvatarImage src={authorImage} />
           <AvatarFallback>{authorName.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
+
         <CardHeader className="w-full px-4 pt-3 sm:flex-row sm:items-center sm:gap-3">
           {authorName}{" "}
           {variant !== "compact" ? (
             <>
               <CardDescription>@{authorHandle}</CardDescription>
-              <Button
-                className={cn("absolute right-4 rounded-full", {
-                  hidden: authorIsCurrentUser,
-                })}
-              >
-                Follow
-              </Button>
+              <FollowButton
+                followedUserId={authorId}
+                currentUserId={currentUserId!}
+              />
             </>
           ) : (
             <CardDescription>
@@ -89,39 +121,34 @@ export function PostCard({
           "justify-end": variant === "compact",
         })}
       >
-        <Button
-          variant="ghost"
-          className={cn("flex cursor-default hover:bg-transparent", {
-            "cursor-pointer hover:bg-sky-100 hover:text-blue-500 dark:hover:bg-opacity-10":
-              variant === "compact",
-          })}
-        >
-          {repliesCount} <MessageCircle className="ml-2 rounded-full" />
-        </Button>
-        <Button
-          variant="ghost"
-          className="flex hover:bg-pink-100 hover:text-pink-500 dark:hover:bg-opacity-10"
-        >
-          {likesCount} <Heart className="ml-2" />
-        </Button>
-        {variant !== "compact" && (
-          <>
-            <Button
-              variant="ghost"
-              className="flex hover:bg-green-100 hover:text-emerald-600 dark:hover:bg-opacity-10"
-            >
-              {bookmarksCount} <Bookmark className="ml-2" />
-            </Button>
-            <Link href={`/threads/${threadId}`}>
-              <Button
-                variant="ghost"
-                className="flex hover:bg-fuchsia-100 hover:text-purple-600 dark:hover:bg-opacity-10"
-              >
-                <Shirt />
-              </Button>
-            </Link>
-          </>
-        )}
+        <TooltipProvider>
+          {pageVariant !== "thread" && (
+            <>
+              <ReplyButton
+                count={repliesCount}
+                hoverEffect={variant === "compact"}
+              />
+              <LikeButton
+                postId={postId}
+                currentUserId={currentUserId}
+                count={likesCount}
+                hoverEffect={variant === "compact"}
+                isLikedByCurrentUser={isLikedByCurrentUser}
+              />
+            </>
+          )}
+          {variant !== "compact" && (
+            <BookmarkButton
+              postId={postId}
+              currentUserId={currentUserId}
+              count={bookmarksCount}
+              isBookmarkedByCurrentUser={isBookmarkedByCurrentUser}
+            />
+          )}
+          {(pageVariant === "thread" || variant !== "compact") && (
+            <ThreadButton count={threadCount} threadId={threadId} hoverEffect />
+          )}
+        </TooltipProvider>
       </CardFooter>
     </Card>
   );

@@ -2,9 +2,19 @@ import React from "react";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import {
+  getCurrentUser,
+  getPostIncludeParams,
+  formatTimestamp,
+} from "@/lib/utils";
+import type {
+  PostData,
+  ThreadData,
+  AuthorData,
+  InteractionsData,
+} from "@/components/post/post-card";
 import { PostCard } from "@/components/post/post-card";
 import { NewPostCard } from "@/components/post/new-post-card";
-import { getCurrentUser, formatTimestamp } from "@/lib/utils";
 
 export default async function PostPage({
   params,
@@ -12,33 +22,26 @@ export default async function PostPage({
   params: { handle: string; threadId: string; postId: string };
 }) {
   // Make sure post ID and thread ID are numbers so we can safely parse to int.
-  // Kinda jank route validation.
-  // TODO: Could probably improve this.
+  // Kinda jank route validation. Could probably be better.
 
   if (!/^\d+$/.test(params.postId) || !/^\d+$/.test(params.threadId))
     notFound();
   const postId = parseInt(params.postId, 10);
   const threadId = parseInt(params.threadId, 10);
 
+  // Reminder: we're already making sure the session exists in the helper function.
+  const { id: currentUserId } = await getCurrentUser();
+
   const post = await prisma.post.findUnique({
     where: { id: postId, threadId: threadId },
     include: {
-      _count: { select: { likes: true, bookmarks: true } }, // Get likes count for the main post.
-      author: {
-        select: { handle: true, membership: true, image: true, name: true },
-      },
+      ...getPostIncludeParams(currentUserId, ["likes", "bookmarks"]),
       parent: {
-        include: {
-          author: true,
-          _count: { select: { likes: true, replies: true } },
-        },
+        include: getPostIncludeParams(currentUserId, ["likes", "replies"]),
       },
       replies: {
         // Get replies under the main post.
-        include: {
-          author: true, // Get the author of the reply.
-          _count: { select: { likes: true, replies: true } }, // Get likes and replies count for each reply.
-        },
+        include: getPostIncludeParams(currentUserId, ["likes", "replies"]),
         orderBy: { updatedAt: "desc" }, // Order replies by latest first.
       },
     },
@@ -49,8 +52,6 @@ export default async function PostPage({
   if (post.author.handle !== params.handle)
     redirect(`/${post.author.handle}/post/${postId}#main`);
 
-  const { handle: currentUserHandle } = await getCurrentUser();
-
   return (
     <>
       {post.parent && (
@@ -59,41 +60,81 @@ export default async function PostPage({
         >
           <PostCard
             variant="compact"
-            authorIsCurrentUser={
-              currentUserHandle === post.parent.author.handle
+            currentUserId={currentUserId}
+            postData={
+              {
+                content: post.parent.content,
+                postId: post.parent.id,
+                timestamp: formatTimestamp(post.parent.updatedAt, "diff"),
+              } satisfies PostData
             }
-            content={post.parent.content}
-            postId={post.parent.id}
-            authorId={post.parent.authorId}
-            authorName={post.parent.author.name!}
-            authorHandle={post.parent.author.handle!}
-            authorImage={post.parent.author.image!}
-            threadId={post.parent.threadId!}
-            timestamp={formatTimestamp(post.parent.updatedAt, "diff")}
-            likesCount={post.parent._count.likes}
-            repliesCount={post.parent._count.replies}
+            threadData={
+              {
+                threadId: post.parent.threadId!,
+              } satisfies ThreadData
+            }
+            authorData={
+              {
+                authorId: post.parent.authorId,
+                authorName: post.parent.author.name!,
+                authorHandle: post.parent.author.handle!,
+                authorImage: post.parent.author.image!,
+              } satisfies AuthorData
+            }
+            interactionsData={
+              {
+                likesCount: post.parent._count.likes,
+                repliesCount: post.parent._count.replies,
+                isLikedByCurrentUser: post.parent.likes.length > 0,
+                isBookmarkedByCurrentUser: post.parent.bookmarks.length > 0,
+              } satisfies InteractionsData
+            }
           />
         </Link>
       )}
 
       {/* Automatically scroll to id="main" on page load. */}
       <div id="main" className="min-h-screen">
-        <PostCard
-          authorIsCurrentUser={currentUserHandle === post.author.handle}
-          content={post.content}
-          postId={parseInt(params.postId)}
-          authorId={post.authorId}
-          authorName={post.author.name!}
-          authorHandle={post.author.handle!}
-          authorImage={post.author.image!}
-          threadId={post.threadId!}
-          timestamp={formatTimestamp(post.updatedAt)}
-          likesCount={post._count.likes}
-          repliesCount={post.replies.length}
-          bookmarksCount={post._count.bookmarks}
-        />
+        <div className="sticky top-0 z-10">
+          <PostCard
+            currentUserId={currentUserId}
+            postData={
+              {
+                content: post.content,
+                postId: post.id,
+                timestamp: formatTimestamp(post.updatedAt),
+              } satisfies PostData
+            }
+            threadData={
+              {
+                threadId: post.threadId!,
+              } satisfies ThreadData
+            }
+            authorData={
+              {
+                authorId: post.authorId,
+                authorName: post.author.name!,
+                authorHandle: post.author.handle!,
+                authorImage: post.author.image!,
+              } satisfies AuthorData
+            }
+            interactionsData={
+              {
+                likesCount: post._count.likes,
+                repliesCount: post._count.replies,
+                bookmarksCount: post._count.bookmarks,
+                isLikedByCurrentUser: post.likes.length > 0,
+                isBookmarkedByCurrentUser: post.bookmarks.length > 0,
+              } satisfies InteractionsData
+            }
+          />
 
-        <NewPostCard replyTo={postId} thread={threadId} />
+          <NewPostCard
+            className="border-t-0 bg-stone-50 dark:bg-stone-950"
+            replyTo={postId}
+            thread={threadId}
+          />
+        </div>
 
         {post.replies.map((reply, index) => (
           <Link
@@ -103,17 +144,35 @@ export default async function PostPage({
           >
             <PostCard
               variant="compact"
-              authorIsCurrentUser={currentUserHandle === reply.author.handle}
-              content={reply.content}
-              postId={reply.id}
-              authorId={reply.authorId}
-              authorName={reply.author.name!}
-              authorHandle={reply.author.handle!}
-              authorImage={reply.author.image!}
-              threadId={reply.threadId!}
-              timestamp={formatTimestamp(reply.updatedAt, "diff")}
-              likesCount={reply._count.likes}
-              repliesCount={reply._count.replies}
+              currentUserId={currentUserId}
+              postData={
+                {
+                  content: reply.content,
+                  postId: reply.id,
+                  timestamp: formatTimestamp(reply.updatedAt, "diff"),
+                } satisfies PostData
+              }
+              threadData={
+                {
+                  threadId: reply.threadId!,
+                } satisfies ThreadData
+              }
+              authorData={
+                {
+                  authorId: reply.authorId,
+                  authorName: reply.author.name!,
+                  authorHandle: reply.author.handle!,
+                  authorImage: reply.author.image!,
+                } satisfies AuthorData
+              }
+              interactionsData={
+                {
+                  likesCount: reply._count.likes,
+                  repliesCount: reply._count.replies,
+                  isLikedByCurrentUser: reply.likes.length > 0,
+                  isBookmarkedByCurrentUser: reply.bookmarks.length > 0,
+                } satisfies InteractionsData
+              }
             />
           </Link>
         ))}

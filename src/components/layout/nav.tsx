@@ -4,7 +4,7 @@ import { getCurrentUser } from "@/lib/utils";
 import { UserCard } from "../user/card";
 import { Logo } from "../logo";
 import { Button } from "@/components/ui/button";
-import { NewPostDialog } from "@/components/post/new-post-dialog";
+import { NewPostDialog } from "@/components/post/new-post-dialog-context";
 import { Home, Bookmark, Shirt, User2 } from "lucide-react";
 
 export async function Nav() {
