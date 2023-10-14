@@ -9,7 +9,7 @@ type HomeHeaderProps = {
 
 export function HomeHeader({ tab }: HomeHeaderProps) {
   return (
-    <Header title="Home">
+    <div className="flex justify-around">
       {tab === "explore" ? (
         <>
           <Button
@@ -43,6 +43,6 @@ export function HomeHeader({ tab }: HomeHeaderProps) {
           </Button>
         </>
       )}
-    </Header>
+    </div>
   );
 }
