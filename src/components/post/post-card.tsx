@@ -1,3 +1,4 @@
+import { Redacted_Script } from "next/font/google";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -55,6 +56,8 @@ type InteractionsData = {
 
 export type { PostData, ThreadData, AuthorData, InteractionsData };
 
+const redacted = Redacted_Script({ weight: "400", subsets: ["latin"] });
+
 export function PostCard({
   variant,
   pageVariant,
@@ -110,7 +113,14 @@ export function PostCard({
         </CardHeader>
       </div>
       <CardContent className="mt-2 pb-[0.65rem]">
-        <p className="break-inside-auto hyphens-auto break-words">{content}</p>
+        <p
+          className={cn(
+            redacted.className,
+            "break-inside-auto hyphens-auto break-words text-2xl",
+          )}
+        >
+          {content}
+        </p>
         {variant !== "compact" && (
           <CardDescription className="pt-6">{timestamp}</CardDescription>
         )}
