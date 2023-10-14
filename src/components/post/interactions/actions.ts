@@ -38,24 +38,28 @@ export const handleLikeOrBookmark = async (
 
   try {
     if (interactions.likedPostId) {
-      await prisma.like.create({
+      const liker = await prisma.like.create({
         data: {
           likerId: currentUserId,
           likedPostId: interactions.likedPostId,
         },
+        select: { liker: { select: { handle: true } } },
       });
 
+      revalidatePath(`/${liker.liker.handle}/likes`);
       return { success: "liked" };
     } else if (interactions.unlikedPostId) {
-      await prisma.like.delete({
+      const liker = await prisma.like.delete({
         where: {
           likerId_likedPostId: {
             likerId: currentUserId,
             likedPostId: interactions.unlikedPostId,
           },
         },
+        select: { liker: { select: { handle: true } } },
       });
 
+      revalidatePath(`/${liker.liker.handle}/likes`);
       return { success: "unliked" };
     } else if (interactions.bookmarkedPostId) {
       await prisma.bookmark.create({
@@ -65,6 +69,7 @@ export const handleLikeOrBookmark = async (
         },
       });
 
+      revalidatePath("/bookmarks");
       return { success: "bookmarked" };
     } else if (interactions.unbookmarkedPostId) {
       await prisma.bookmark.delete({
@@ -75,6 +80,8 @@ export const handleLikeOrBookmark = async (
           },
         },
       });
+
+      revalidatePath("/bookmarks");
       return { success: "unbookmarked" };
     }
   } catch (err) {

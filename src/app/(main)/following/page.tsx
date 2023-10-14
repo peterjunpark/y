@@ -15,9 +15,7 @@ import type {
   InteractionsData,
 } from "@/components/post/post-card";
 import { PostCard } from "@/components/post/post-card";
-
 import { HomeHeader } from "@/components/home/header";
-import { NewPostCard } from "@/components/post/new-post-card";
 
 export const metadata: Metadata = {
   title: "Home / Y",
@@ -37,7 +35,6 @@ export default async function Following() {
   return (
     <>
       <HomeHeader tab="following" />
-      <NewPostCard />
       <div className="flex flex-col-reverse">
         {posts.map((post, index) => (
           <Link
