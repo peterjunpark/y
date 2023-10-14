@@ -1,8 +1,13 @@
 import React from "react";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { SignupForm } from "@/components/signup/form";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
+
+export const metadata: Metadata = {
+  title: "Create Your Profile / Y",
+};
 
 export default async function CreateHandle() {
   const session = await getServerSession(authOptions);

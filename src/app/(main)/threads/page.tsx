@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
@@ -15,6 +16,10 @@ import type {
 } from "@/components/post/post-card";
 import { PostCard } from "@/components/post/post-card";
 import { Header } from "@/components/layout/header";
+
+export const metadata: Metadata = {
+  title: "Threads / Y",
+};
 
 export default async function Threads() {
   const { id: currentUserId } = await getCurrentUser();

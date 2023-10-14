@@ -1,5 +1,10 @@
 import React from "react";
+import type { Metadata } from "next";
 import { LogInButton } from "@/components/auth/buttons";
+
+export const metadata: Metadata = {
+  title: "Log In / Y",
+};
 
 export default function Login() {
   return (
