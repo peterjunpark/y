@@ -1,5 +1,6 @@
 "use client";
 
+import { Redacted_Script } from "next/font/google";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,6 +32,8 @@ type NewPostFormProps = {
   replyTo?: number;
   thread?: number;
 };
+
+const redacted = Redacted_Script({ weight: "400", subsets: ["latin"] });
 
 export function NewPostForm({ variant, replyTo, thread }: NewPostFormProps) {
   const form = useForm<FormSchema>({
@@ -81,7 +84,10 @@ export function NewPostForm({ variant, replyTo, thread }: NewPostFormProps) {
                     replyTo ? "Reply to this post ..." : "What's going on? ..."
                   }
                   {...field}
-                  className="resize-none"
+                  className={cn(
+                    redacted.className,
+                    "resize-none text-2xl placeholder:font-sans placeholder:text-sm",
+                  )}
                 />
               </FormControl>
               {(charCount > 0 || !variant) && (
