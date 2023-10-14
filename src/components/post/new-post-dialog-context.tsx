@@ -36,7 +36,10 @@ export function useNewPostDialog() {
   return context;
 }
 
-export function NewPostDialog() {
+type NewPostDialogProps = {
+  image: string | null | undefined;
+};
+export function NewPostDialog({ image }: NewPostDialogProps) {
   const { data: session } = useSession(); // This component has to be a client component, so get image from client session.
   const { open, setOpen } = useNewPostDialog();
 
@@ -51,7 +54,7 @@ export function NewPostDialog() {
       <DialogContent className="max-w-xl pb-0">
         <Card className="flex items-start gap-3 rounded-none border-none p-2">
           <span className="hidden pt-2 sm:block">
-            <UserAvatar image={session?.user.image} />
+            <UserAvatar image={image} />
           </span>
           <NewPostForm />
         </Card>

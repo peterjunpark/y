@@ -36,6 +36,7 @@ type ThreadButtonProps = {
 
 type FollowButtonProps = {
   hidden?: boolean;
+  className?: string;
   followedUserId: string;
   currentUserId: string;
 };
@@ -248,6 +249,7 @@ export function ThreadButton({ count, threadId }: ThreadButtonProps) {
 export function FollowButton({
   currentUserId,
   followedUserId,
+  className,
 }: FollowButtonProps) {
   const handleFollow = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -255,9 +257,13 @@ export function FollowButton({
   return (
     <Button
       onClick={handleFollow}
-      className={cn("absolute right-4 rounded-full", {
-        hidden: currentUserId === followedUserId,
-      })}
+      className={cn(
+        "absolute right-4 rounded-full",
+        {
+          hidden: currentUserId === followedUserId,
+        },
+        className,
+      )}
     >
       Follow
     </Button>

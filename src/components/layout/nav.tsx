@@ -8,6 +8,8 @@ import { NewPostDialog } from "@/components/post/new-post-dialog-context";
 import { Home, Bookmark, Shirt, User2 } from "lucide-react";
 
 export async function Nav() {
+  const { name, image, handle } = await getCurrentUser();
+
   const navItems = [
     { name: "Home", href: "/home", icon: <Home className="my-[0.175rem]" /> },
     {
@@ -29,7 +31,7 @@ export async function Nav() {
     },
     {
       name: "Profile",
-      href: "/profile",
+      href: `/${handle}`,
       icon: <User2 className="my-[0.175rem]" />,
     },
   ];
@@ -54,10 +56,10 @@ export async function Nav() {
               </Link>
             </Button>
           ))}
-          <NewPostDialog />
+          <NewPostDialog image={image} />
         </nav>
       </div>
-      <UserCard />
+      <UserCard {...{ name, image, handle }} />
     </div>
   );
 }

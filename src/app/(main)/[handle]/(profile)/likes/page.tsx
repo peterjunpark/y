@@ -13,37 +13,49 @@ import type {
   AuthorData,
   InteractionsData,
 } from "@/components/post/post-card";
+import { ProfileHeader } from "@/components/profile/header";
 import { PostCard } from "@/components/post/post-card";
-import { Header } from "@/components/layout/header";
 
-export default async function Threads() {
+export default async function ProfileLikes({
+  params,
+}: {
+  params: { handle: string };
+}) {
   const { id: currentUserId } = await getCurrentUser();
 
-  const threads = await prisma.thread.findMany({
-    include: {
-      _count: { select: { posts: true } },
-      posts: {
-        include: getPostIncludeParams(currentUserId),
-        orderBy: { createdAt: "asc" },
-        take: 1,
+  const user = await prisma.user.findUnique({
+    where: { handle: params.handle },
+    select: {
+      handle: true,
+      likes: {
+        include: {
+          likedPost: {
+            include: getPostIncludeParams(currentUserId, ["likes", "replies"]),
+          },
+        },
       },
     },
-    orderBy: { updatedAt: "asc" },
   });
 
-  if (!threads) notFound();
+  if (!user) notFound();
 
   return (
     <>
-      <Header title="Threads" />
+      <ProfileHeader
+        currentUserId={currentUserId}
+        tab="likes"
+        userHandle={user.handle!}
+      />
       <div className="flex flex-col-reverse">
-        {threads.map((thread, index) => {
-          const post = thread.posts[0];
+        {user.likes.map((like, index) => {
+          const post = like.likedPost;
 
           return (
-            <Link href={`/threads/${post.threadId}`} key={index}>
+            <Link
+              key={index}
+              href={`/${post.author.handle}/${post.threadId}/${post.id}#main`}
+            >
               <PostCard
-                pageVariant="thread"
                 variant="compact"
                 currentUserId={currentUserId}
                 postData={
@@ -56,7 +68,6 @@ export default async function Threads() {
                 threadData={
                   {
                     threadId: post.threadId!,
-                    threadCount: thread._count.posts,
                   } satisfies ThreadData
                 }
                 authorData={
@@ -69,6 +80,8 @@ export default async function Threads() {
                 }
                 interactionsData={
                   {
+                    likesCount: post._count.likes,
+                    repliesCount: post._count.replies,
                     isLikedByCurrentUser: post.likes.length > 0,
                     isBookmarkedByCurrentUser: post.bookmarks.length > 0,
                   } satisfies InteractionsData

@@ -20,6 +20,7 @@ export default async function Bookmarks() {
   const { id: currentUserId } = await getCurrentUser();
 
   const bookmarks = await prisma.bookmark.findMany({
+    where: { bookmarkerId: currentUserId },
     include: {
       bookmarkedPost: {
         include: getPostIncludeParams(currentUserId, [
@@ -29,8 +30,9 @@ export default async function Bookmarks() {
         ]),
       },
     },
-    orderBy: { bookmarkedPostId: "asc" },
   });
+
+  console.log(bookmarks);
 
   return (
     <>

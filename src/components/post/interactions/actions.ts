@@ -1,7 +1,6 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { parsePrismaError } from "@/lib/utils";
 
@@ -62,7 +61,7 @@ export const handleLikeOrBookmark = async (
           bookmarkedPostId: interactions.bookmarkedPostId,
         },
       });
-      revalidatePath("/bookmarks");
+
       return { success: "bookmarked" };
     } else if (interactions.unbookmarkedPostId) {
       await prisma.bookmark.delete({
@@ -73,7 +72,6 @@ export const handleLikeOrBookmark = async (
           },
         },
       });
-      revalidatePath("/bookmarks");
       return { success: "unbookmarked" };
     }
   } catch (err) {

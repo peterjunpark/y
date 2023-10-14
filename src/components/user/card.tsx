@@ -11,9 +11,13 @@ import { ThemeToggle } from "@/components/theme/toggle";
 import { LogOutButton } from "@/components/auth/buttons";
 import { MoreVertical } from "lucide-react";
 
-export async function UserCard() {
-  const { name, image, handle } = await getCurrentUser();
+type UserCardProps = {
+  name: string;
+  image: string | null | undefined;
+  handle: string;
+};
 
+export async function UserCard({ name, image, handle }: UserCardProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>

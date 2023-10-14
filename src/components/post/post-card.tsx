@@ -7,7 +7,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { TooltipProvider } from "../ui/tooltip";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { PostAvatar } from "./post-avatar";
 import {
   FollowButton,
   ReplyButton,
@@ -84,11 +84,7 @@ export function PostCard({
       data-author-id={authorId}
     >
       <div className="relative flex items-center pt-[0.4rem]">
-        <Avatar className="ml-3">
-          <AvatarImage src={authorImage} />
-          <AvatarFallback>{authorName.charAt(0).toUpperCase()}</AvatarFallback>
-        </Avatar>
-
+        <PostAvatar {...{ authorImage, authorName, authorHandle }} />
         <CardHeader className="w-full px-4 pt-3 sm:flex-row sm:items-center sm:gap-3">
           {authorName}{" "}
           {variant !== "compact" ? (
