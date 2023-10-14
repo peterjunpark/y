@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import {
@@ -6,7 +7,6 @@ import {
   getCurrentUser,
   getPostIncludeParams,
 } from "@/lib/utils";
-
 import { Header } from "@/components/layout/header";
 import type {
   PostData,
@@ -15,6 +15,10 @@ import type {
   InteractionsData,
 } from "@/components/post/post-card";
 import { PostCard } from "@/components/post/post-card";
+
+export const metadata: Metadata = {
+  title: "Bookmarks / Y",
+};
 
 export default async function Bookmarks() {
   const { id: currentUserId } = await getCurrentUser();

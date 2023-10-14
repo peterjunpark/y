@@ -18,7 +18,7 @@ import { PostCard } from "@/components/post/post-card";
 import { HomeHeader } from "@/components/home/header";
 
 export const metadata: Metadata = {
-  title: "Home / Y",
+  title: "Following / Y",
 };
 
 export default async function Following() {

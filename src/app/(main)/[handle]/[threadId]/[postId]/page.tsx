@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
@@ -15,6 +16,10 @@ import type {
 } from "@/components/post/post-card";
 import { PostCard } from "@/components/post/post-card";
 import { NewPostCard } from "@/components/post/new-post-card";
+
+export const metadata: Metadata = {
+  title: "Post / Y",
+};
 
 export default async function PostPage({
   params,
