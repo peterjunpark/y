@@ -35,7 +35,6 @@ export default async function ProfilePosts({
 
   if (!user) notFound();
 
-  console.log(user);
   return (
     <>
       <ProfileHeader
@@ -84,6 +83,11 @@ export default async function ProfilePosts({
           </Link>
         ))}
       </div>
+      {user.posts.length < 1 && (
+        <div className="flex w-full justify-center py-10 text-muted-foreground">
+          <p>Post something to see it here</p>
+        </div>
+      )}
     </>
   );
 }

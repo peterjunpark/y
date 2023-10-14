@@ -15,6 +15,7 @@ import type {
   InteractionsData,
 } from "@/components/post/post-card";
 import { PostCard } from "@/components/post/post-card";
+
 import { HomeHeader } from "@/components/home/header";
 import { NewPostCard } from "@/components/post/new-post-card";
 
@@ -22,10 +23,11 @@ export const metadata: Metadata = {
   title: "Home / Y",
 };
 
-export default async function Home() {
+export default async function Following() {
   const { id: currentUserId } = await getCurrentUser();
 
   const posts = await prisma.post.findMany({
+    where: { author: { followers: { some: { id: currentUserId } } } },
     include: getPostIncludeParams(currentUserId, ["likes", "replies"]),
     orderBy: { updatedAt: "asc" },
   });
@@ -34,7 +36,7 @@ export default async function Home() {
 
   return (
     <>
-      <HomeHeader tab="explore" />
+      <HomeHeader tab="following" />
       <NewPostCard />
       <div className="flex flex-col-reverse">
         {posts.map((post, index) => (
@@ -77,6 +79,11 @@ export default async function Home() {
           </Link>
         ))}
       </div>
+      {posts.length < 1 && (
+        <div className="flex w-full justify-center py-10 text-muted-foreground">
+          <p>Follow someone to see their posts here</p>
+        </div>
+      )}
     </>
   );
 }

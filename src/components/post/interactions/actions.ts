@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { parsePrismaError } from "@/lib/utils";
@@ -43,6 +44,7 @@ export const handleLikeOrBookmark = async (
           likedPostId: interactions.likedPostId,
         },
       });
+
       return { success: "liked" };
     } else if (interactions.unlikedPostId) {
       await prisma.like.delete({
@@ -53,6 +55,7 @@ export const handleLikeOrBookmark = async (
           },
         },
       });
+
       return { success: "unliked" };
     } else if (interactions.bookmarkedPostId) {
       await prisma.bookmark.create({
@@ -73,6 +76,58 @@ export const handleLikeOrBookmark = async (
         },
       });
       return { success: "unbookmarked" };
+    }
+  } catch (err) {
+    console.error(err);
+    return { error: parsePrismaError(err) };
+  }
+};
+
+type FollowReturnType = {
+  success?: "followed" | "unfollowed";
+  error?: { message: string; code: string; target: unknown };
+};
+
+export const handleFollow = async (
+  formData: FormData,
+): Promise<FollowReturnType | void> => {
+  const currentUserId = formData.get("currentUserId")?.toString();
+  const followedUserId = formData.get("followedUserId")?.toString();
+  const unfollowedUserId = formData.get("unfollowedUserId")?.toString();
+
+  if (followedUserId && unfollowedUserId) {
+    return {
+      error: parsePrismaError("Cannot follow and unfollow at the same time."),
+    };
+  }
+
+  try {
+    if (followedUserId) {
+      const user = await prisma.user.update({
+        where: { id: followedUserId },
+        data: {
+          followers: {
+            connect: { id: currentUserId },
+          },
+        },
+        select: { handle: true },
+      });
+
+      revalidatePath(`/${user.handle}`);
+      return { success: "followed" };
+    } else if (unfollowedUserId) {
+      const user = await prisma.user.update({
+        where: { id: unfollowedUserId },
+        data: {
+          followers: {
+            disconnect: { id: currentUserId },
+          },
+        },
+        select: { handle: true },
+      });
+
+      revalidatePath(`/${user.handle}`);
+      return { success: "unfollowed" };
     }
   } catch (err) {
     console.error(err);

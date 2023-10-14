@@ -50,6 +50,7 @@ type InteractionsData = {
   bookmarksCount?: number;
   isLikedByCurrentUser: boolean;
   isBookmarkedByCurrentUser: boolean;
+  isFollowedByCurrentUser?: boolean;
 };
 
 export type { PostData, ThreadData, AuthorData, InteractionsData };
@@ -67,6 +68,7 @@ export function PostCard({
     bookmarksCount,
     isLikedByCurrentUser,
     isBookmarkedByCurrentUser,
+    isFollowedByCurrentUser,
   },
 }: PostCardProps) {
   return (
@@ -93,6 +95,7 @@ export function PostCard({
               <FollowButton
                 followedUserId={authorId}
                 currentUserId={currentUserId!}
+                isFollowedByCurrentUser={isFollowedByCurrentUser!}
               />
             </>
           ) : (

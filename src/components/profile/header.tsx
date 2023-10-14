@@ -23,6 +23,7 @@ export async function ProfileHeader({
     where: { handle: userHandle },
     include: {
       _count: { select: { followers: true, posts: true } },
+      followers: { where: { id: currentUserId } },
     },
   });
 
@@ -48,6 +49,7 @@ export async function ProfileHeader({
                 className="relative"
                 followedUserId={user.id}
                 currentUserId={currentUserId}
+                isFollowedByCurrentUser={user.followers.length > 0}
               />
             </div>
             <ul className="gap-2 px-6">

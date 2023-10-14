@@ -11,7 +11,6 @@ datasource db {
 model Like {
   liker       User   @relation(fields: [likerId], references: [id], onDelete: Cascade)
   likerId     String
-  likerHandle String @db.VarChar(12)
   likedPost   Post   @relation(fields: [likedPostId], references: [id])
   likedPostId Int
 
@@ -74,7 +73,7 @@ model User {
   likes         Like[]
   bookmarks     Bookmark[]
   followers     User[]         @relation("following")
-  followedBy    User[]         @relation("following")
+  following     User[]         @relation("following")
 
   @@index([handle])
 }

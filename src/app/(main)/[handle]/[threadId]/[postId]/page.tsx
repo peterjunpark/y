@@ -125,6 +125,7 @@ export default async function PostPage({
                 bookmarksCount: post._count.bookmarks,
                 isLikedByCurrentUser: post.likes.length > 0,
                 isBookmarkedByCurrentUser: post.bookmarks.length > 0,
+                isFollowedByCurrentUser: post.author.followers.length > 0,
               } satisfies InteractionsData
             }
           />

@@ -32,8 +32,6 @@ export default async function Bookmarks() {
     },
   });
 
-  console.log(bookmarks);
-
   return (
     <>
       <Header title="Bookmarks" />
@@ -84,9 +82,11 @@ export default async function Bookmarks() {
           );
         })}
       </div>
-      <div className="flex w-full justify-center py-10 text-muted-foreground">
-        <p>No more bookmarks</p>
-      </div>
+      {bookmarks.length < 1 && (
+        <div className="flex w-full justify-center py-10 text-muted-foreground">
+          <p>Bookmark something to see it here</p>
+        </div>
+      )}
     </>
   );
 }

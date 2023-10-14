@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
-import { handleLikeOrBookmark } from "./actions";
+import { handleLikeOrBookmark, handleFollow } from "./actions";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,10 +36,10 @@ type ThreadButtonProps = {
 } & ReplyButtonProps;
 
 type FollowButtonProps = {
-  hidden?: boolean;
   className?: string;
   followedUserId: string;
   currentUserId: string;
+  isFollowedByCurrentUser: boolean;
 };
 
 export function ReplyButton({ count, hoverEffect }: ReplyButtonProps) {
@@ -85,6 +86,7 @@ export function LikeButton({
 
     (async () => {
       if (isLiked === initialIsLiked.current) return;
+
       const res = await handleLikeOrBookmark(formData);
 
       if (res) {
@@ -184,7 +186,8 @@ export function BookmarkButton({
         }
       }
     })();
-  });
+  }, [isBookmarked, toast, currentUserId, postId]);
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -250,22 +253,67 @@ export function FollowButton({
   currentUserId,
   followedUserId,
   className,
+  isFollowedByCurrentUser,
 }: FollowButtonProps) {
-  const handleFollow = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-  };
+  const [isFollowed, setIsFollowed] = useState<boolean>(
+    isFollowedByCurrentUser,
+  );
+  const initialIsFollowed = useRef<boolean>(isFollowedByCurrentUser);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const formData = new FormData();
+    formData.append("currentUserId", currentUserId);
+
+    if (isFollowed) {
+      formData.append("followedUserId", followedUserId);
+    } else {
+      formData.append("unfollowedUserId", followedUserId);
+    }
+
+    (async () => {
+      if (isFollowed === initialIsFollowed.current) return;
+
+      const res = await handleFollow(formData);
+
+      if (res) {
+        if (res.success === "followed") {
+          toast({
+            title: "Followed",
+          });
+          initialIsFollowed.current = isFollowed;
+        } else if (res.success === "unfollowed") {
+          toast({
+            title: "Unfollowed",
+          });
+          initialIsFollowed.current = isFollowed;
+        } else if (res.error) {
+          toast({
+            variant: "destructive",
+            title: "Something went wrong",
+            description: res.error.message,
+          });
+          setIsFollowed(initialIsFollowed.current);
+        }
+      }
+    })();
+  }, [isFollowed, toast, currentUserId, followedUserId]);
+
   return (
     <Button
-      onClick={handleFollow}
+      onClick={(e) => {
+        e.preventDefault();
+        setIsFollowed((prev) => !prev);
+      }}
       className={cn(
-        "absolute right-4 rounded-full",
+        "absolute right-4 w-24 rounded-full",
         {
           hidden: currentUserId === followedUserId,
         },
         className,
       )}
     >
-      Follow
+      {isFollowed ? "Following" : "Follow"}
     </Button>
   );
 }

@@ -91,6 +91,11 @@ export default async function ProfileLikes({
           );
         })}
       </div>
+      {user.likes.length < 1 && (
+        <div className="flex w-full justify-center py-10 text-muted-foreground">
+          <p>Like some posts to see them here</p>
+        </div>
+      )}
     </>
   );
 }

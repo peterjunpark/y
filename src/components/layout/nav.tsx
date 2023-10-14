@@ -22,13 +22,13 @@ export async function Nav() {
       href: "/threads",
       icon: <Shirt className="my-[0.175rem]" />,
     },
-    {
-      name: "Premium",
-      href: "/premium",
-      icon: (
-        <Logo className="ml-[0.23rem] mr-[0.1rem] mt-1 text-[1.6rem] leading-none" />
-      ),
-    },
+    // {
+    //   name: "Premium",
+    //   href: "/premium",
+    //   icon: (
+    //     <Logo className="ml-[0.23rem] mr-[0.1rem] mt-1 text-[1.6rem] leading-none" />
+    //   ),
+    // },
     {
       name: "Profile",
       href: `/${handle}`,

@@ -57,7 +57,13 @@ export function getPostIncludeParams(
   return {
     // Get author details.
     author: {
-      select: { handle: true, membership: true, image: true, name: true },
+      select: {
+        handle: true,
+        membership: true,
+        image: true,
+        name: true,
+        followers: { where: { id: currentUserId } },
+      },
     },
     // Used to check if the current user has liked the post.
     likes: { where: { likerId: currentUserId } },
