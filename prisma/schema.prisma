@@ -9,25 +9,44 @@ datasource db {
 }
 
 model Like {
+  liker       User   @relation(fields: [likerId], references: [id], onDelete: Cascade)
   likerId     String
-  likedPostId Int
-  liker       User   @relation(fields: [likerId], references: [id])
   likedPost   Post   @relation(fields: [likedPostId], references: [id])
+  likedPostId Int
 
   @@id([likerId, likedPostId])
   @@index([likedPostId])
 }
 
-model Post {
+model Bookmark {
+  bookmarker       User   @relation(fields: [bookmarkerId], references: [id], onDelete: Cascade)
+  bookmarkerId     String
+  bookmarkedPost   Post   @relation(fields: [bookmarkedPostId], references: [id])
+  bookmarkedPostId Int
+
+  @@id([bookmarkerId, bookmarkedPostId])
+}
+
+model Thread {
   id        Int      @id @default(autoincrement())
-  content   String
-  replies   Post[]   @relation("replies")
-  parent    Post?    @relation("replies", fields: [parentId], references: [id])
-  parentId  Int?
-  likes     Like[]
+  posts     Post[]   @relation("thread")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  author    User     @relation(fields: [authorId], references: [id])
+}
+
+model Post {
+  id        Int        @id @default(autoincrement())
+  content   String
+  replies   Post[]     @relation("replies")
+  parent    Post?      @relation("replies", fields: [parentId], references: [id])
+  parentId  Int?
+  thread    Thread?    @relation("thread", fields: [threadId], references: [id], onDelete: Cascade)
+  threadId  Int?
+  likes     Like[]
+  bookmarks Bookmark[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  author    User       @relation(fields: [authorId], references: [id])
   authorId  String
 
   @@index([authorId])
@@ -52,6 +71,11 @@ model User {
   membership    MembershipEnum @default(standard)
   posts         Post[]
   likes         Like[]
+  bookmarks     Bookmark[]
+  followers     User[]         @relation("following")
+  following     User[]         @relation("following")
+
+  @@index([handle])
 }
 
 // next-auth

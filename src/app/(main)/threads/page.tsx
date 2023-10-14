@@ -1,4 +1,5 @@
 import React from "react";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import {
@@ -6,8 +7,6 @@ import {
   getCurrentUser,
   getPostIncludeParams,
 } from "@/lib/utils";
-
-import { Header } from "@/components/layout/header";
 import type {
   PostData,
   ThreadData,
@@ -15,37 +14,36 @@ import type {
   InteractionsData,
 } from "@/components/post/post-card";
 import { PostCard } from "@/components/post/post-card";
+import { Header } from "@/components/layout/header";
 
-export default async function Bookmarks() {
+export default async function Threads() {
   const { id: currentUserId } = await getCurrentUser();
 
-  const bookmarks = await prisma.bookmark.findMany({
-    where: { bookmarkerId: currentUserId },
+  const threads = await prisma.thread.findMany({
     include: {
-      bookmarkedPost: {
-        include: getPostIncludeParams(currentUserId, [
-          "likes",
-          "replies",
-          "bookmarks",
-        ]),
+      _count: { select: { posts: true } },
+      posts: {
+        include: getPostIncludeParams(currentUserId),
+        orderBy: { createdAt: "asc" },
+        take: 1,
       },
     },
+    orderBy: { updatedAt: "asc" },
   });
+
+  if (!threads) notFound();
 
   return (
     <>
-      <Header title="Bookmarks" />
+      <Header title="Threads" />
       <div className="flex flex-col-reverse">
-        {bookmarks.map((bookmark, index) => {
-          const post = bookmark.bookmarkedPost;
+        {threads.map((thread, index) => {
+          const post = thread.posts[0];
 
           return (
-            <Link
-              key={index}
-              href={`/${post.author.handle}/${post.threadId}/${post.id}#main`}
-            >
+            <Link href={`/threads/${post.threadId}`} key={index}>
               <PostCard
-                pageVariant="bookmark"
+                pageVariant="thread"
                 variant="compact"
                 currentUserId={currentUserId}
                 postData={
@@ -58,6 +56,7 @@ export default async function Bookmarks() {
                 threadData={
                   {
                     threadId: post.threadId!,
+                    threadCount: thread._count.posts,
                   } satisfies ThreadData
                 }
                 authorData={
@@ -70,9 +69,6 @@ export default async function Bookmarks() {
                 }
                 interactionsData={
                   {
-                    likesCount: post._count.likes,
-                    repliesCount: post._count.replies,
-                    bookmarksCount: post._count.bookmarks,
                     isLikedByCurrentUser: post.likes.length > 0,
                     isBookmarkedByCurrentUser: post.bookmarks.length > 0,
                   } satisfies InteractionsData
@@ -82,11 +78,6 @@ export default async function Bookmarks() {
           );
         })}
       </div>
-      {bookmarks.length < 1 && (
-        <div className="flex w-full justify-center py-10 text-muted-foreground">
-          <p>Bookmark something to see it here</p>
-        </div>
-      )}
     </>
   );
 }

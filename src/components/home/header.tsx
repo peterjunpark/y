@@ -1,37 +1,48 @@
-"use client";
-
-import React, { useState } from "react";
-import { cn } from "@/lib/utils";
+import React from "react";
+import Link from "next/link";
+import { Header } from "../layout/header";
 import { Button } from "@/components/ui/button";
 
-type Tab = "explore" | "following";
+type HomeHeaderProps = {
+  tab: "explore" | "following";
+};
 
-export function HomeHeader() {
-  const [tab, setTab] = useState<Tab>("explore");
-
+export function HomeHeader({ tab }: HomeHeaderProps) {
   return (
-    <div className="h-30 back sticky top-0 z-50 backdrop-blur-md">
-      <h1 className="p-3 text-xl font-semibold">Home</h1>
-      <div className="flex justify-around">
-        <Button
-          variant="ghost"
-          className={cn("w-full rounded-none py-6 text-base font-semibold", {
-            "underline underline-offset-8": tab === "explore",
-          })}
-          onClick={() => setTab("explore")}
-        >
-          Explore
-        </Button>
-        <Button
-          variant="ghost"
-          className={cn("w-full rounded-none py-6 text-base font-semibold", {
-            "underline underline-offset-8": tab === "following",
-          })}
-          onClick={() => setTab("following")}
-        >
-          Following
-        </Button>
-      </div>
-    </div>
+    <Header title="Home">
+      {tab === "explore" ? (
+        <>
+          <Button
+            variant="ghost"
+            className="w-full rounded-none py-6 text-base font-semibold underline underline-offset-8"
+          >
+            Explore
+          </Button>
+          <Button
+            asChild
+            variant="ghost"
+            className="w-full rounded-none py-6 text-base font-semibold"
+          >
+            <Link href="/following">Following</Link>
+          </Button>
+        </>
+      ) : (
+        <>
+          <Button
+            asChild
+            variant="ghost"
+            className="w-full rounded-none py-6 text-base font-semibold"
+          >
+            <Link href="/home">Explore</Link>
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full rounded-none py-6 text-base font-semibold underline underline-offset-8"
+          >
+            Following
+          </Button>
+        </>
+      )}
+    </Header>
   );
 }

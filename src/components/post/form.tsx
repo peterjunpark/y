@@ -1,12 +1,11 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { handleSubmit } from "./form-action";
 import { cn } from "@/lib/utils";
-import { useNewPostDialog } from "./new-post-dialog";
+import { useNewPostDialog } from "./new-post-dialog-context";
 import {
   Form,
   FormControl,
@@ -30,9 +29,10 @@ type FormSchema = z.infer<typeof formSchema>;
 type NewPostFormProps = {
   variant?: "compact";
   replyTo?: number;
+  thread?: number;
 };
 
-export function NewPostForm({ variant, replyTo }: NewPostFormProps) {
+export function NewPostForm({ variant, replyTo, thread }: NewPostFormProps) {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,14 +41,14 @@ export function NewPostForm({ variant, replyTo }: NewPostFormProps) {
   });
   const { toast } = useToast();
   const { setOpen } = useNewPostDialog();
-  const pathname = usePathname();
 
   const charCount = form.watch("content").length;
 
   const onSubmit = async (values: FormSchema) => {
     const formData = new FormData();
     formData.append("content", values.content.trim());
-    // if (variant === "reply") formData.append("replyTo");
+    if (replyTo) formData.append("replyTo", replyTo.toString());
+    if (thread) formData.append("thread", thread.toString());
 
     const error = await handleSubmit(formData);
 
@@ -60,7 +60,7 @@ export function NewPostForm({ variant, replyTo }: NewPostFormProps) {
       });
     } else {
       toast({
-        title: "Post created",
+        title: replyTo ? "Post created" : "Thread created",
       });
       form.reset();
       setOpen(false);

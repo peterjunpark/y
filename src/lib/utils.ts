@@ -18,6 +18,10 @@ export const parsePrismaError = (error: unknown) => {
     if (error.code === "P2002") {
       message = "Handle already taken!";
     }
+
+    if (error.code === "P2025") {
+      message = "Record does not exist!";
+    }
     return { message, code: error.code, target: error.meta!.target };
   }
 
@@ -43,9 +47,46 @@ export const getCurrentUser = async () => {
   };
 };
 
+type CountType = "likes" | "bookmarks" | "replies";
+type CountParams = [CountType, CountType?, CountType?];
+
+export function getPostIncludeParams(
+  currentUserId: string,
+  countsOf?: CountParams,
+) {
+  return {
+    // Get author details.
+    author: {
+      select: {
+        handle: true,
+        membership: true,
+        image: true,
+        name: true,
+        followers: { where: { id: currentUserId } },
+      },
+    },
+    // Used to check if the current user has liked the post.
+    likes: { where: { likerId: currentUserId } },
+
+    // Used to check if the current user has bookmarked the post.
+    bookmarks: { where: { bookmarkerId: currentUserId } },
+
+    // Get likes and bookmarks count for the post.
+    _count: countsOf
+      ? {
+          select: {
+            likes: countsOf.includes("likes"),
+            replies: countsOf.includes("replies"),
+            bookmarks: countsOf.includes("bookmarks"),
+          },
+        }
+      : undefined,
+  };
+}
+
 dayjs.extend(relativeTime);
 
 export const formatTimestamp = (timestamp: Date, diff?: "diff"): string => {
-  if (diff) return dayjs().to(dayjs(timestamp));
+  if (diff) return dayjs(timestamp).fromNow();
   return dayjs(timestamp).format("MMM D, YYYY h:mm A");
 };

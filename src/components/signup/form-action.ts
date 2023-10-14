@@ -5,9 +5,9 @@ import prisma from "@/lib/prisma";
 import { parsePrismaError } from "@/lib/utils";
 
 export const handleSubmit = async (formData: FormData) => {
-  const id = formData.get("id") as string;
-  const name = formData.get("name") as string;
-  const handle = formData.get("handle") as string;
+  const id = formData.get("id")!.toString();
+  const name = formData.get("name")?.toString();
+  const handle = formData.get("handle")!.toString();
 
   try {
     await prisma.user.update({

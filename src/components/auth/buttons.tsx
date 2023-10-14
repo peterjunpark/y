@@ -4,19 +4,34 @@ import React from "react";
 import { signIn, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
-import { Github, Discord } from "react-bootstrap-icons";
+import {
+  SiGithub as Github,
+  SiDiscord as Discord,
+  SiKakaotalk as Kakao,
+  SiOsu as Osu,
+} from "react-icons/si";
 
 export function LogInButton() {
   const loginProviders = [
+    {
+      name: "Discord",
+      icon: <Discord className="text-2xl" />,
+      oAuthProvider: "discord",
+    },
     {
       name: "GitHub",
       icon: <Github className="text-2xl" />,
       oAuthProvider: "github",
     },
     {
-      name: "Discord",
-      icon: <Discord className="text-2xl" />,
-      oAuthProvider: "discord",
+      name: "KakaoTalk",
+      icon: <Kakao className="text-2xl" />,
+      oAuthProvider: "kakao",
+    },
+    {
+      name: "Osu!",
+      icon: <Osu className="text-2xl" />,
+      oAuthProvider: "osu",
     },
   ];
 
@@ -27,7 +42,7 @@ export function LogInButton() {
           key={index} // Added key prop for React list rendering
           onClick={() => signIn(oAuthProvider, { callbackUrl: "/home" })}
           variant="default"
-          className="m-2 flex w-[16.9rem] justify-start gap-3 rounded-full"
+          className="m-2 flex w-[18rem] justify-start gap-3 rounded-full"
         >
           {icon}
           Log in or sign up with {name}

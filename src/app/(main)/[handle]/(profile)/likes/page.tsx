@@ -1,4 +1,5 @@
 import React from "react";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import {
@@ -6,38 +7,48 @@ import {
   getCurrentUser,
   getPostIncludeParams,
 } from "@/lib/utils";
-
-import { Header } from "@/components/layout/header";
 import type {
   PostData,
   ThreadData,
   AuthorData,
   InteractionsData,
 } from "@/components/post/post-card";
+import { ProfileHeader } from "@/components/profile/header";
 import { PostCard } from "@/components/post/post-card";
 
-export default async function Bookmarks() {
+export default async function ProfileLikes({
+  params,
+}: {
+  params: { handle: string };
+}) {
   const { id: currentUserId } = await getCurrentUser();
 
-  const bookmarks = await prisma.bookmark.findMany({
-    where: { bookmarkerId: currentUserId },
-    include: {
-      bookmarkedPost: {
-        include: getPostIncludeParams(currentUserId, [
-          "likes",
-          "replies",
-          "bookmarks",
-        ]),
+  const user = await prisma.user.findUnique({
+    where: { handle: params.handle },
+    select: {
+      handle: true,
+      likes: {
+        include: {
+          likedPost: {
+            include: getPostIncludeParams(currentUserId, ["likes", "replies"]),
+          },
+        },
       },
     },
   });
 
+  if (!user) notFound();
+
   return (
     <>
-      <Header title="Bookmarks" />
+      <ProfileHeader
+        currentUserId={currentUserId}
+        tab="likes"
+        userHandle={user.handle!}
+      />
       <div className="flex flex-col-reverse">
-        {bookmarks.map((bookmark, index) => {
-          const post = bookmark.bookmarkedPost;
+        {user.likes.map((like, index) => {
+          const post = like.likedPost;
 
           return (
             <Link
@@ -45,7 +56,6 @@ export default async function Bookmarks() {
               href={`/${post.author.handle}/${post.threadId}/${post.id}#main`}
             >
               <PostCard
-                pageVariant="bookmark"
                 variant="compact"
                 currentUserId={currentUserId}
                 postData={
@@ -72,7 +82,6 @@ export default async function Bookmarks() {
                   {
                     likesCount: post._count.likes,
                     repliesCount: post._count.replies,
-                    bookmarksCount: post._count.bookmarks,
                     isLikedByCurrentUser: post.likes.length > 0,
                     isBookmarkedByCurrentUser: post.bookmarks.length > 0,
                   } satisfies InteractionsData
@@ -82,9 +91,9 @@ export default async function Bookmarks() {
           );
         })}
       </div>
-      {bookmarks.length < 1 && (
+      {user.likes.length < 1 && (
         <div className="flex w-full justify-center py-10 text-muted-foreground">
-          <p>Bookmark something to see it here</p>
+          <p>Like some posts to see them here</p>
         </div>
       )}
     </>

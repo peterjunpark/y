@@ -1,12 +1,11 @@
 import React from "react";
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import {
+  formatTimestamp,
   getCurrentUser,
   getPostIncludeParams,
-  formatTimestamp,
 } from "@/lib/utils";
 import type {
   PostData,
@@ -14,30 +13,37 @@ import type {
   AuthorData,
   InteractionsData,
 } from "@/components/post/post-card";
+import { ProfileHeader } from "@/components/profile/header";
 import { PostCard } from "@/components/post/post-card";
-import { HomeHeader } from "@/components/home/header";
-import { NewPostCard } from "@/components/post/new-post-card";
 
-export const metadata: Metadata = {
-  title: "Home / Y",
-};
-
-export default async function Home() {
+export default async function ProfilePosts({
+  params,
+}: {
+  params: { handle: string };
+}) {
   const { id: currentUserId } = await getCurrentUser();
 
-  const posts = await prisma.post.findMany({
-    include: getPostIncludeParams(currentUserId, ["likes", "replies"]),
-    orderBy: { updatedAt: "asc" },
+  const user = await prisma.user.findUnique({
+    where: { handle: params.handle },
+    select: {
+      handle: true,
+      posts: {
+        include: getPostIncludeParams(currentUserId, ["likes", "replies"]),
+      },
+    },
   });
 
-  if (!posts) notFound();
+  if (!user) notFound();
 
   return (
     <>
-      <HomeHeader tab="explore" />
-      <NewPostCard />
+      <ProfileHeader
+        currentUserId={currentUserId}
+        tab="posts"
+        userHandle={user.handle!}
+      />
       <div className="flex flex-col-reverse">
-        {posts.map((post, index) => (
+        {user.posts.map((post, index) => (
           <Link
             key={index}
             href={`/${post.author.handle}/${post.threadId}/${post.id}#main`}
@@ -77,6 +83,11 @@ export default async function Home() {
           </Link>
         ))}
       </div>
+      {user.posts.length < 1 && (
+        <div className="flex w-full justify-center py-10 text-muted-foreground">
+          <p>Post something to see it here</p>
+        </div>
+      )}
     </>
   );
 }

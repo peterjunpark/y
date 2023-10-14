@@ -4,10 +4,12 @@ import { getCurrentUser } from "@/lib/utils";
 import { UserCard } from "../user/card";
 import { Logo } from "../logo";
 import { Button } from "@/components/ui/button";
-import { NewPostDialog } from "@/components/post/new-post-dialog";
-import { Home, Search, Bookmark, Users2, User2 } from "lucide-react";
+import { NewPostDialog } from "@/components/post/new-post-dialog-context";
+import { Home, Bookmark, Shirt, User2 } from "lucide-react";
 
 export async function Nav() {
+  const { name, image, handle } = await getCurrentUser();
+
   const navItems = [
     { name: "Home", href: "/home", icon: <Home className="my-[0.175rem]" /> },
     {
@@ -16,20 +18,20 @@ export async function Nav() {
       icon: <Bookmark className="my-[0.175rem]" />,
     },
     {
-      name: "Communities",
-      href: "/communities",
-      icon: <Users2 className="my-[0.175rem]" />,
+      name: "Threads",
+      href: "/threads",
+      icon: <Shirt className="my-[0.175rem]" />,
     },
-    {
-      name: "Premium",
-      href: "/premium",
-      icon: (
-        <Logo className="ml-[0.23rem] mr-[0.1rem] mt-1 text-[1.6rem] leading-none" />
-      ),
-    },
+    // {
+    //   name: "Premium",
+    //   href: "/premium",
+    //   icon: (
+    //     <Logo className="ml-[0.23rem] mr-[0.1rem] mt-1 text-[1.6rem] leading-none" />
+    //   ),
+    // },
     {
       name: "Profile",
-      href: "/profile",
+      href: `/${handle}`,
       icon: <User2 className="my-[0.175rem]" />,
     },
   ];
@@ -54,10 +56,10 @@ export async function Nav() {
               </Link>
             </Button>
           ))}
-          <NewPostDialog />
+          <NewPostDialog image={image} />
         </nav>
       </div>
-      <UserCard />
+      <UserCard {...{ name, image, handle }} />
     </div>
   );
 }
