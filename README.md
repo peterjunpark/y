@@ -4,10 +4,7 @@
   [![Next][Next.js]][Next-url] [![React][React.js]][React-url]
 
   <a href="#About">About</a> ▪️ 
-  <a href="#Installation">Installation</a> ▪️ 
-  <a href="#How it works">How it works</a> ▪️ 
-  <a href="#Roadmap">Roadmap</a> ▪️ 
-  <a href="#Contributing">Contributing</a>
+  <a href="#Installation">Installation</a>
   
 </div>
 
@@ -15,7 +12,7 @@
 
 ![Y login page screenshot](https://github.com/peterjunpark/y/assets/115042610/18596434-8c80-4ba5-81f1-e23f71d67304)
 
-Description here
+A Twitter clone that supports text posts, comments, user profiles, follows, threads, bookmarks, and likes.
 
 ### Built with
 
@@ -39,6 +36,8 @@ First, get the things you'll need:
   ```sh
   npm i -g pnpm
   ```
+* Setup [Neon](https://console.neon.tech/app/projects).
+  > If you're not using Neon Postgres, you'll need to redefine your Prisma schema in `y/prisma/schema.prisma` to support your database.
 * Obtain client IDs and secrets for Y's supported [OAuth](https://next-auth.js.org/configuration/providers/oauth) providers.
   * [Discord](https://discord.com/developers/applications)
   * [GitHub](https://github.com/settings/apps)
@@ -51,53 +50,41 @@ Now, complete these steps:
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/peterjunpark/crosswordfish.git
+   git clone https://github.com/peterjunpark/y.git
    ```
 2. Install dependencies via pnpm
    ```sh
-   cd crosswordfish
+   cd y
    pnpm i
    ```
-3. Create a `.env` file in the root directory and add your OpenAI API key.
+3. Create a `.env` file in the root directory and add your database URLs and OAuth client ids and secrets. If you're not hosting on Vercel, you'll also need to add a [NEXTAUTH_URL](https://next-auth.js.org/configuration/options).
    ```
-   OPEN_AI_API_KEY= ...
+   # OAuth providers
+   DISCORD_ID=...
+   DISCORD_SECRET=...
+   GITHUB_ID=...
+   GITHUB_SECRET=...
+   KAKAO_ID=...
+   KAKAO_SECRET=...
+   OSU_ID=...
+   OSU_SECRET=...
+   # NextAuth
+   NEXTAUTH_SECRET=...
+   # Database
+   NEON_DATABASE_URL=...
+   SHADOW_DATABASE_URL=...
    ```
-4. Start the development server
+4. Migrate your Prisma schema to your db, then generate your [Prisma Client](https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/generating-prisma-client).
+   ```
+   pnpm db:migrate
+   pnpm generate
+   ```
+6. Start the development server
    ```sh
    pnpm dev
    ```
 
-You should now be able to navigate to `http://localhost:3001` and play some crosswords 😁.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-## Roadmap
-
-A running list of the main features to be added to Crosswordfish.
-
-- [x] Add crossword grid generation
-    - [ ] Support for American-style grids 
-    - [x] Support for freeform crossword grids     
-- [x] Add crossword clues generation using GPT-3.5
-    - [x] Support for American-style crossword clues
-    - [ ] Support for cryptic (British-style) crossword clues
-- [x] Add keyboard controls
-- [x] Add grid reset, word reveal, dark mode, and confetti.
-- [ ] Add ability to save, share, download, and print crosswords
-- [ ] Add crossword creation and publishing
-- [ ] Improve responsive design for mobile
-- [ ] Add PWA features
-- [ ] Improve performance (AI completion fetching, data parsing, grid generation)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-This project will likely not be updated. I intend to rebuild Crosswordfish using the lessons learned here.
-> The best way to build something is to build it twice. --- Someone
-
-Feel free to fork the project for your own purposes.
+The app should now be up and running at `http://localhost:3000`.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
