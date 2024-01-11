@@ -14,9 +14,11 @@
 
 A Twitter clone that supports text posts, comments, user profiles, follows, threads, bookmarks, and likes.
 
+I built Y as an exercise to get comfortable using Next.js' new, hyped features at the time: the stable release of the App router with Server Actions.
+
 ### Built with
 
-These are the main technologies used to build Crosswordfish. Have a look at the `package.json` file for a full list of dependencies.
+These are the main technologies used to build Y.
 
 * [React](https://react.dev)
 * [Next.js 13 (App router)](https://nextjs.org)
