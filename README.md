@@ -5,6 +5,7 @@
 
   <a href="#About">About</a> ▪️ 
   <a href="#Installation">Installation</a>
+  <a href="#Screenshots">Screenshots</a>
   
 </div>
 
@@ -87,6 +88,18 @@ Now, complete these steps:
    ```
 
 The app should now be up and running at `http://localhost:3000`.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Screenshots
+
+![image](https://github.com/peterjunpark/y/assets/115042610/63e4dc5e-7e2d-4c7c-8e0c-a13a67613afa)
+
+![image](https://github.com/peterjunpark/y/assets/115042610/f242a303-ec38-45f0-b5ea-883e7c51cb5c)
+
+![image](https://github.com/peterjunpark/y/assets/115042610/4e706647-2073-4438-937f-75daf9b4e493)
+
+![image](https://github.com/peterjunpark/y/assets/115042610/c6b65de5-a982-44b1-a153-c39f38ae03d6)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
