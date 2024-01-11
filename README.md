@@ -1,50 +1,117 @@
-# Next.js 13 Template
+<div align="center">
+  <h1 align="center" id="top">Y</h1>
+  
+  [![Next][Next.js]][Next-url] [![React][React.js]][React-url]
 
-This template provides a more optimized starting point for Next.js projects using the [App router](https://nextjs.org/docs/app) and TypeScript.
+  <a href="#About">About</a> ▪️ 
+  <a href="#Installation">Installation</a> ▪️ 
+  <a href="#How it works">How it works</a> ▪️ 
+  <a href="#Roadmap">Roadmap</a> ▪️ 
+  <a href="#Contributing">Contributing</a>
+  
+</div>
 
-## Styling
+## About
 
-It features enhanced DX for TailwindCSS by incorporating [`clsx`](https://www.npmjs.com/package/clsx) and [`tailwind-merge`](https://www.npmjs.com/package/tailwind-merge) to handle conditional Tailwind classes while predictably resolving class conflicts. [`Prettier`](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) is configured to automatically sort Tailwind classes.
+![Y login page screenshot](https://github.com/peterjunpark/y/assets/115042610/18596434-8c80-4ba5-81f1-e23f71d67304)
 
-A barebones dark-mode toggle is implemented using [`next-themes`](https://www.npmjs.com/package/next-themes).
+Description here
 
----
+### Built with
 
----
+These are the main technologies used to build Crosswordfish. Have a look at the `package.json` file for a full list of dependencies.
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+* [React](https://react.dev)
+* [Next.js 13 (App router)](https://nextjs.org)
+* [NextAuth.js / Auth.js](https://next-auth.js.org)
+* [shadcn/ui](https://ui.shadcn.com) with [TailwindCSS](https://tailwindcss.com)
 
-## Getting Started
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-First, run the development server:
+## Installation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+First, get the things you'll need:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Prerequisites
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* Install [Node.js](https://nodejs.org)
+* Install [pnpm](https://pnpm.io/installation)
+  ```sh
+  npm i -g pnpm
+  ```
+* Obtain client IDs and secrets for Y's supported [OAuth](https://next-auth.js.org/configuration/providers/oauth) providers.
+  * [Discord](https://discord.com/developers/applications)
+  * [GitHub](https://github.com/settings/apps)
+  * [Kakao](https://developers.kakao.com/docs/latest/en/kakaologin/common)
+  * [Osu!](https://osu.ppy.sh/home/account/edit#new-oauth-application)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Getting started
 
-## Learn More
+Now, complete these steps:
 
-To learn more about Next.js, take a look at the following resources:
+1. Clone the repo
+   ```sh
+   git clone https://github.com/peterjunpark/crosswordfish.git
+   ```
+2. Install dependencies via pnpm
+   ```sh
+   cd crosswordfish
+   pnpm i
+   ```
+3. Create a `.env` file in the root directory and add your OpenAI API key.
+   ```
+   OPEN_AI_API_KEY= ...
+   ```
+4. Start the development server
+   ```sh
+   pnpm dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You should now be able to navigate to `http://localhost:3001` and play some crosswords 😁.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-## Deploy on Vercel
+## Roadmap
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+A running list of the main features to be added to Crosswordfish.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [x] Add crossword grid generation
+    - [ ] Support for American-style grids 
+    - [x] Support for freeform crossword grids     
+- [x] Add crossword clues generation using GPT-3.5
+    - [x] Support for American-style crossword clues
+    - [ ] Support for cryptic (British-style) crossword clues
+- [x] Add keyboard controls
+- [x] Add grid reset, word reveal, dark mode, and confetti.
+- [ ] Add ability to save, share, download, and print crosswords
+- [ ] Add crossword creation and publishing
+- [ ] Improve responsive design for mobile
+- [ ] Add PWA features
+- [ ] Improve performance (AI completion fetching, data parsing, grid generation)
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+This project will likely not be updated. I intend to rebuild Crosswordfish using the lessons learned here.
+> The best way to build something is to build it twice. --- Someone
+
+Feel free to fork the project for your own purposes.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://react.dev/
